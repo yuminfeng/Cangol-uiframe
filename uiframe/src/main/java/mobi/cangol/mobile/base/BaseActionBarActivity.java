@@ -23,8 +23,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -39,7 +39,7 @@ import mobi.cangol.mobile.actionbar.ActionMenu;
 import mobi.cangol.mobile.actionbar.ActionMenuItem;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
-import mobi.cangol.mobile.service.session.SessionService;
+import mobi.cangol.mobile.service.session.Session;
 
 public abstract class BaseActionBarActivity extends ActionBarActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate {
     protected final String TAG = Log.makeLogTag(this.getClass());
@@ -47,7 +47,8 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     protected CustomFragmentManager stack;
     private long startTime;
     private HandlerThread handlerThread;
-    private Handler handler;
+    private Handler threadHandler;
+    private Handler uiHandler;
     public float getIdleTime() {
         return (System.currentTimeMillis() - startTime) / 1000.0f;
     }
@@ -60,7 +61,8 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
         startTime = System.currentTimeMillis();
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        handler = new InternalHandler(this,handlerThread.getLooper());
+        threadHandler = new InternalHandler(this,handlerThread.getLooper());
+        uiHandler= new InternalHandler(this,Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
         getCustomActionBar().setDisplayShowHomeEnabled(true);
@@ -115,6 +117,10 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
             Log.e(TAG,"Can not perform this action after onSaveInstanceState");
         }
     }
+    @Override
+    public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args,int moduleId) {
+        this.replaceFragment(fragmentClass,tag,args);
+    }
 
     @Override
     public CustomFragmentManager getCustomFragmentManager() {
@@ -127,7 +133,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     }
 
     @Override
-    public SessionService getSession() {
+    public Session getSession() {
         return app.getSession();
     }
 
@@ -178,7 +184,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     }
     @Override
     public void onMenuActionCreated(ActionMenu actionMenu) {
-        if (stack != null && stack.size() > 0&&stack.peek().isEnable()) {
+        if (stack != null && stack.size() > 0&&null!=stack.peek()&&stack.peek().isEnable()) {
             ((BaseContentFragment) stack.peek()).onMenuActionCreated(actionMenu);
         }
     }
@@ -309,13 +315,18 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     }
 
     @Override
-    public Handler getHandler() {
-        return handler;
+    public Handler getUiHandler() {
+        return uiHandler;
+    }
+
+    @Override
+    public Handler getThreadHandler() {
+        return threadHandler;
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (handler!= null && runnable != null)
-            handler.post(runnable);
+        if (threadHandler!= null && runnable != null)
+            threadHandler.post(runnable);
     }
     protected void handleMessage(Message msg) {
         //do somethings

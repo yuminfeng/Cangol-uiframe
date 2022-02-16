@@ -23,9 +23,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.fragment.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -37,6 +37,7 @@ import java.lang.ref.WeakReference;
 import mobi.cangol.mobile.CoreApplication;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
+import mobi.cangol.mobile.service.session.Session;
 import mobi.cangol.mobile.service.session.SessionService;
 
 public abstract class BaseFragmentActivity extends FragmentActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate {
@@ -45,7 +46,8 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
     private CustomFragmentManager stack;
     private long startTime;
     private HandlerThread handlerThread;
-    private Handler handler;
+    private Handler threadHandler;
+    private Handler uiHandler;
     public float getIdleTime() {
         return (System.currentTimeMillis() - startTime) / 1000.0f;
     }
@@ -58,7 +60,8 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
         startTime = System.currentTimeMillis();
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        handler = new InternalHandler(this,handlerThread.getLooper());
+        threadHandler = new BaseActionBarActivity.InternalHandler(this,handlerThread.getLooper());
+        uiHandler= new BaseActionBarActivity.InternalHandler(this,Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
     }
@@ -108,7 +111,10 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
             Log.e(TAG,"Can not perform this action after onSaveInstanceState");
         }
     }
-
+    @Override
+    public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args,int moduleId) {
+        this.replaceFragment(fragmentClass,tag,args);
+    }
     @Override
     public CustomFragmentManager getCustomFragmentManager() {
         return stack;
@@ -129,7 +135,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
      *
      * @return
      */
-    public SessionService getSession() {
+    public Session getSession() {
         return app.getSession();
     }
 
@@ -295,13 +301,18 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
     }
 
     @Override
-    public Handler getHandler() {
-        return handler;
+    public Handler getUiHandler() {
+        return uiHandler;
+    }
+
+    @Override
+    public Handler getThreadHandler() {
+        return threadHandler;
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (handler!= null && runnable != null)
-            handler.post(runnable);
+        if (threadHandler!= null && runnable != null)
+            threadHandler.post(runnable);
     }
     protected void handleMessage(Message msg) {
         //do somethings

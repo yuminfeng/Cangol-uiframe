@@ -24,10 +24,10 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
-import android.support.v4.app.Fragment;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.fragment.app.Fragment;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,6 +41,7 @@ import java.lang.ref.WeakReference;
 import mobi.cangol.mobile.CoreApplication;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
+import mobi.cangol.mobile.service.session.Session;
 import mobi.cangol.mobile.service.session.SessionService;
 
 public abstract class BaseFragment extends Fragment {
@@ -54,9 +55,9 @@ public abstract class BaseFragment extends Fragment {
     private int resultCode = RESULT_CANCELED;
     private Bundle resultData;
     private CustomFragmentManager stack;
-    private InternalHandler handler;
     protected HandlerThread handlerThread;
-
+    private Handler threadHandler;
+    private Handler uiHandler;
     /**
      * 查找view
      *
@@ -77,6 +78,11 @@ public abstract class BaseFragment extends Fragment {
      * @param savedInstanceState
      */
     protected abstract  void initData(Bundle savedInstanceState);
+
+
+    public void onNewBundle(Bundle bundle) {
+        Log.v(TAG, "onNewBundle");
+    }
 
     /**
      * 返回上级导航fragment
@@ -139,7 +145,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return
      */
-    public SessionService getSession() {
+    public Session getSession() {
         return app.getSession();
     }
 
@@ -173,7 +179,8 @@ public abstract class BaseFragment extends Fragment {
         Log.v(TAG, "onCreate");
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        handler = new InternalHandler(this, handlerThread.getLooper());
+        threadHandler = new InternalHandler(this,handlerThread.getLooper());
+        uiHandler= new InternalHandler(this,Looper.getMainLooper());
         app = (CoreApplication) this.getActivity().getApplication();
         if (savedInstanceState != null&&null != stack) {
            stack.restoreState(savedInstanceState);
@@ -237,7 +244,6 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        getHandler().getLooper().quit();
         handlerThread.quit();
         if (null != stack)stack.destroy();
         super.onDestroy();
@@ -757,8 +763,11 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    protected Handler getHandler() {
-        return handler;
+    protected Handler getUiHandler() {
+        return uiHandler;
+    }
+    protected Handler getThreadHandler() {
+        return threadHandler;
     }
 
     protected void handleMessage(Message msg) {
@@ -766,13 +775,13 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (handler != null && runnable != null)
-            handler.post(runnable);
+        if (threadHandler != null && runnable != null)
+            threadHandler.post(runnable);
     }
 
     protected void postRunnable(Runnable runnable) {
-        if (handler != null && runnable != null)
-            handler.post(runnable);
+        if (threadHandler != null && runnable != null)
+            threadHandler.post(runnable);
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {

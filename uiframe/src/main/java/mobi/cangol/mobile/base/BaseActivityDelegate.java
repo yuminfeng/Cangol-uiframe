@@ -17,12 +17,12 @@ package mobi.cangol.mobile.base;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import android.widget.EditText;
 
 import mobi.cangol.mobile.service.AppService;
-import mobi.cangol.mobile.service.session.SessionService;
+import mobi.cangol.mobile.service.session.Session;
 
 public interface BaseActivityDelegate {
 
@@ -89,7 +89,7 @@ public interface BaseActivityDelegate {
      *
      * @return
      */
-    SessionService getSession();
+    Session getSession();
 
     /**
      * 设置全屏
@@ -128,10 +128,14 @@ public interface BaseActivityDelegate {
     void hideSoftInput(EditText editText);
 
     /**
-     * 获取一个主线程的Handler
+     * 获取主线程的Handler
      */
-    Handler getHandler();
+    Handler getUiHandler();
 
+    /**
+     * 获取共享线程的Handler
+     */
+    Handler getThreadHandler();
 
     @ColorInt
     int getThemeAttrColor(@AttrRes int colorAttr);

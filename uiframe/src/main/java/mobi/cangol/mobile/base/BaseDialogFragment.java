@@ -22,10 +22,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -72,7 +72,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
         this.mShownByMe = true;
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     public int show(FragmentTransaction transaction, String tag) {
@@ -80,7 +80,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
         this.mShownByMe = true;
         transaction.add(this, tag);
         this.mViewDestroyed = false;
-        this.mBackStackId = transaction.commit();
+        this.mBackStackId = transaction.commitAllowingStateLoss();
         return this.mBackStackId;
     }
 

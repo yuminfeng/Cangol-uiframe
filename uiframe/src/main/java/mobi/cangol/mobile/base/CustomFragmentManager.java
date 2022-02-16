@@ -19,10 +19,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import mobi.cangol.mobile.logging.Log;
 
@@ -37,28 +39,36 @@ public class CustomFragmentManager {
     private final Runnable execPendingTransactions = new Runnable() {
         @Override
         public void run() {
-            if (fragmentTransaction != null && fActivity != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (!fActivity.isFinishing() && !fActivity.isDestroyed()) {
-                        try {
-                            fragmentTransaction.commitAllowingStateLoss();
-                            fragmentManager.executePendingTransactions();
-                            fragmentTransaction = null;
-                        } catch (IllegalStateException e) {
-                            Log.e(STATE_TAG, "execPendingTransactions", e);
+            try {
+                if (fragmentTransaction != null && fActivity != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        if (!fActivity.isFinishing() && !fActivity.isDestroyed()) {
+                            try {
+                                fragmentTransaction.commitAllowingStateLoss();
+                                fragmentManager.executePendingTransactions();
+                                fragmentTransaction = null;
+                            } catch (IllegalStateException e) {
+                                Log.e(STATE_TAG, "execPendingTransactions", e);
+                            }
                         }
-                    }
-                } else {
-                    if (!fActivity.isFinishing()) {
-                        try {
-                            fragmentTransaction.commitAllowingStateLoss();
-                            fragmentManager.executePendingTransactions();
-                            fragmentTransaction = null;
-                        } catch (IllegalStateException e) {
-                            Log.e(STATE_TAG, "execPendingTransactions", e);
+                    } else {
+                        if (!fActivity.isFinishing()) {
+                            try {
+                                fragmentTransaction.commitAllowingStateLoss();
+                                fragmentManager.executePendingTransactions();
+                                fragmentTransaction = null;
+                            } catch (IllegalStateException e) {
+                                Log.e(STATE_TAG, "execPendingTransactions", e);
+                            }
                         }
                     }
                 }
+            }catch (OutOfMemoryError error){
+                if (!fActivity.isFinishing())
+                    fActivity.finish();
+            }catch (Exception e){
+                if (!fActivity.isFinishing())
+                    fActivity.finish();
             }
         }
     };
@@ -146,6 +156,7 @@ public class CustomFragmentManager {
     }
 
     public void replace(Class<? extends BaseFragment> clazz, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
+        Log.v(STATE_TAG, "replace clazz="+clazz+",tag="+tag+",args="+args);
         if (fragmentManager.isDestroyed() || isStateSaved()) return;
         if (clazz.isAssignableFrom(BaseDialogFragment.class))
             throw new IllegalStateException("DialogFragment can not be attached to a container view");
@@ -156,17 +167,25 @@ public class CustomFragmentManager {
             if (fragment.isCleanStack()) {
                 Log.i(STATE_TAG, "fragment isCleanStack=true,while pop all");
                 while (stack.size() > 0) {
+                    BaseFragment temp;
                     synchronized (lock) {
-                        stack.popFragment();
+                        temp=stack.popFragment();
                         stack.popTag();
                     }
-                    fragmentManager.popBackStack();
+                    Log.v(STATE_TAG, "FragmentStackSize="+stack.size()+" backStackEntryCount="+fragmentManager.getBackStackEntryCount());
+                    if(stack.size() > 0||!temp.isCleanStack())
+                        fragmentManager.popBackStack();
+                    else{
+                        BaseFragment top = temp;
+                        Log.v(STATE_TAG, "detach="+top);
+                        if(top!=null)beginTransaction().detach(top);
+                    }
                 }
             } else {
                 Log.i(STATE_TAG, "fragment isCleanStack=false");
                 if (fragment.isSingleton() && stack.containsTag(tag)) {
                     Log.i(STATE_TAG, "fragment isSingleton=true,while pop all");
-                    while (!tag.equals(stack.peekTag())) {
+                    while (stack.size() > 0&&!tag.equals(stack.peekTag())) {
                         synchronized (lock) {
                             stack.popFragment();
                             stack.popTag();
@@ -185,36 +204,51 @@ public class CustomFragmentManager {
         } else {
             Log.i(STATE_TAG, "fragment is exist");
             if (fragment.isCleanStack()) {
+                Log.i(STATE_TAG, "stack size="+stack.size());
                 if (stack.size() == 1) {
                     if (stack.peekTag().equals(tag)) {
+                        fragment.onNewBundle(args);
                         return;
                     } else {
+                        BaseFragment temp;
                         synchronized (lock) {
-                            stack.popFragment();
+                            temp=stack.popFragment();
                             stack.popTag();
                         }
-                        fragmentManager.popBackStack();
-                        fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
+                        BaseFragment top = temp;Log.v(STATE_TAG, "detach="+top);
+                        if(top!=null)beginTransaction().detach(top);
+                        fragment.onNewBundle(args);
                     }
                 } else {
                     Log.i(STATE_TAG, "fragment isCleanStack=true,while pop all");
                     while (stack.size() > 0) {
+                        BaseFragment temp;
                         synchronized (lock) {
-                            stack.popFragment();
+                            temp=stack.popFragment();
                             stack.popTag();
                         }
-                        fragmentManager.popBackStack();
+                        Log.v(STATE_TAG, "FragmentStackSize="+stack.size()+" backStackEntryCount="+fragmentManager.getBackStackEntryCount());
+                        if(stack.size() > 0&&!temp.isCleanStack())
+                            fragmentManager.popBackStack();
+                        else{
+                            BaseFragment top = temp;
+                            Log.v(STATE_TAG, "detach="+top);
+                            if(top!=null)beginTransaction().detach(top);
+                            fragment.onNewBundle(args);
+                            if (top!=null&& TextUtils.equals(top.getClass().getName(),tag)) {
+                                Log.v(STATE_TAG, "isCleanStack=true,same tag,new instance"+tag);
+                                fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
+                            }
+                        }
                     }
-                    fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
                 }
             } else {
                 Log.i(STATE_TAG, "fragment isCleanStack=false");
                 if (!fragment.isSingleton()) {
                     Log.i(STATE_TAG, "fragment isSingleton=false,newInstance");
-                    fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
                 } else {
                     Log.i(STATE_TAG, "fragment isSingleton=true,while pop all");
-                    while (!tag.equals(stack.peekTag())) {
+                    while (stack.size() > 0&&!tag.equals(stack.peekTag())) {
                         synchronized (lock) {
                             stack.popFragment();
                             stack.popTag();
@@ -226,8 +260,8 @@ public class CustomFragmentManager {
                         stack.popTag();
                     }
                     fragmentManager.popBackStack();
-                    fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
                 }
+                fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
             }
         }
         if (customFragmentTransaction != null)
@@ -245,7 +279,6 @@ public class CustomFragmentManager {
                 }
             }
         }
-
         attachFragment(fragment, tag);
         synchronized (lock) {
             stack.addFragment(fragment);
@@ -304,6 +337,21 @@ public class CustomFragmentManager {
         return false;
     }
 
+    public boolean popBackStack(boolean cleanFirst) {
+        if (fragmentManager.isDestroyed() || isStateSaved()) return false;
+        if (cleanFirst||stack.size() > 1) {
+            fragmentManager.popBackStack();
+            synchronized (lock) {
+                BaseFragment baseFragment = stack.popFragment();
+                stack.popTag();
+                if (baseFragment != null && baseFragment.getTargetFragment() != null) {
+                    baseFragment.notifyResult();
+                }
+            }
+            return true;
+        }
+        return false;
+    }
     public boolean popBackStack(String tag, int flag) {
         if (fragmentManager.isDestroyed() || isStateSaved()) return false;
         if (stack.size() > 1) {
