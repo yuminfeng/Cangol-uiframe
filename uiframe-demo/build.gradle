@@ -19,6 +19,8 @@ dependencies {
     implementation 'com.squareup.okio:okio:2.2.2'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
 
+    api 'androidx.multidex:multidex:2.0.1'
+
     //leak canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 }
@@ -28,6 +30,7 @@ android {
     buildToolsVersion "$build_version"
 
     defaultConfig {
+        multiDexEnabled true
         minSdkVersion Integer.decode("$min_version")
         targetSdkVersion Integer.decode("$target_version")
         versionCode Integer.decode("${POM_VERSION_CODE}")

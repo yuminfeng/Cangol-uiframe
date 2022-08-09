@@ -7,7 +7,6 @@ buildscript {
     repositories {
         mavenCentral()
         maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
-        jcenter()
         google()
     }
     dependencies {
@@ -23,7 +22,6 @@ allprojects {
     repositories {
         mavenCentral()
         maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
-        jcenter()
         google()
     }
 }
