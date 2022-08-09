@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'net.saliman.cobertura'
 apply from: '../maven_push.gradle'
 apply from: '../config/quality.gradle'
 apply plugin: 'com.jakewharton.hugo'
@@ -62,7 +61,6 @@ artifacts {
     archives javadocJar
     archives sourcesJar
 }
-cobertura.coverageFormats = ['html', 'xml']
 
 tasks.coveralls {
     dependsOn 'check'
