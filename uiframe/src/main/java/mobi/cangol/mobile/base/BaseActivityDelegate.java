@@ -23,6 +23,7 @@ import android.widget.EditText;
 
 import mobi.cangol.mobile.service.AppService;
 import mobi.cangol.mobile.service.session.Session;
+import mobi.cangol.mobile.service.session.SessionService;
 
 public interface BaseActivityDelegate {
 
@@ -89,7 +90,7 @@ public interface BaseActivityDelegate {
      *
      * @return
      */
-    Session getSession();
+    SessionService getSession();
 
     /**
      * 设置全屏

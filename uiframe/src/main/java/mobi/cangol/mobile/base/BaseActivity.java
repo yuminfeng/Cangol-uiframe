@@ -38,6 +38,7 @@ import mobi.cangol.mobile.CoreApplication;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
 import mobi.cangol.mobile.service.session.Session;
+import mobi.cangol.mobile.service.session.SessionService;
 
 /**
  * @author Cangol
@@ -132,7 +133,7 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
         super.onSaveInstanceState(outState);
     }
 
-    public Session getSession() {
+    public SessionService getSession() {
         return app.getSession();
     }
 

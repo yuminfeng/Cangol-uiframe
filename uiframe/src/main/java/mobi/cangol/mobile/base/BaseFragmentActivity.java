@@ -135,7 +135,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
      *
      * @return
      */
-    public Session getSession() {
+    public SessionService getSession() {
         return app.getSession();
     }
 

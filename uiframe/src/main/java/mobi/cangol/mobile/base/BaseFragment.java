@@ -145,7 +145,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return
      */
-    public Session getSession() {
+    public SessionService getSession() {
         return app.getSession();
     }
 
