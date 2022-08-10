@@ -63,7 +63,6 @@ public class HomeFragment extends BaseContentFragment {
         list.add(TabsFragment.class.getSimpleName().replace("Fragment", ""));
         list.add(TabPagesFragment.class.getSimpleName().replace("Fragment", ""));
         list.add(DialogFragment.class.getSimpleName().replace("Fragment", ""));
-        list.add(MaskViewFragment.class.getSimpleName().replace("Fragment", ""));
         list.add(HighLightFragment.class.getSimpleName().replace("Fragment", ""));
         if (getActivity() instanceof TabDrawerNavigationFragmentActivity)
             list.add(DrawerFragment.class.getSimpleName().replace("Fragment", ""));
