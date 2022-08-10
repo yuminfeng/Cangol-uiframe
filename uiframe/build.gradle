@@ -6,7 +6,7 @@ apply from: '../config/quality.gradle'
 apply plugin: 'com.jakewharton.hugo'
 
 dependencies {
-    api fileTree(include: ['*.jar','*.aar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
 
     implementation 'androidx.fragment:fragment:1.2.5'
     implementation 'androidx.appcompat:appcompat:1.2.0'

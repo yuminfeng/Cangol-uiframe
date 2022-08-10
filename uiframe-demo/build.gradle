@@ -5,6 +5,8 @@ fir {
     changeLog ''
 }
 dependencies {
+
+    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation project(':uiframe')
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
