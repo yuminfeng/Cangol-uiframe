@@ -5,7 +5,7 @@ dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.slidingpanelayout:slidingpanelayout:1.1.0'
+    implementation 'androidx.slidingpanelayout:slidingpanelayout:1.2.0'
 }
 
 android {
