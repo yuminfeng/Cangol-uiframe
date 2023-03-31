@@ -5,22 +5,26 @@ buildscript {
     ext.target_version = 31
     ext.build_version = '30.0.3'
     repositories {
+        maven {
+            allowInsecureProtocol = true
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
         mavenCentral()
-        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
-        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
 }
 allprojects {
     repositories {
+        maven {
+            allowInsecureProtocol = true
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
         mavenCentral()
-        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         google()
     }
 }
