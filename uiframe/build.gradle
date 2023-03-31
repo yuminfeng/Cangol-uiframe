@@ -1,6 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.kt3k.coveralls'
-apply from: '../maven_push.gradle'
 apply from: '../config/quality.gradle'
 
 dependencies {
@@ -66,8 +64,4 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives javadocJar
     archives sourcesJar
-}
-
-tasks.coveralls {
-    dependsOn 'check'
 }

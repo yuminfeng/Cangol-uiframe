@@ -7,3 +7,4 @@
 - upgrade appcompat = 1.4.1
 - upgrade material = 1.5.0
 - upgrade gradle 7.1.2
+- remove kt3k.gradle.plugin
