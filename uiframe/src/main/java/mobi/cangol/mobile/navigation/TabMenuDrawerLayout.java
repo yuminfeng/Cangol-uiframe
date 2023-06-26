@@ -3,16 +3,10 @@ package mobi.cangol.mobile.navigation;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Rect;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-import androidx.drawerlayout.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,7 +17,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import java.lang.reflect.Method;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import mobi.cangol.mobile.uiframe.R;
 
@@ -120,8 +114,7 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
         ViewGroup contentView=  view.findViewById(R.id.actionbar_content_view);
         if(contentView!=null){
             ViewGroup decorChild= (ViewGroup)contentView.getChildAt(0);
-            if(decorChild!=null
-                &&Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(decorChild != null) {
                     WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
                     FrameLayout.LayoutParams layoutParams=(FrameLayout.LayoutParams)decorChild.getLayoutParams();
                     switch (manager.getDefaultDisplay().getRotation()) {
@@ -147,7 +140,7 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
         Log.d(TAG,"fitPadding "+rect.toString());
         boolean hasNavigationBar=checkDeviceHasNavigationBar();
         Log.d(TAG,"checkDeviceHasNavigationBar="+hasNavigationBar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP&&hasNavigationBar) {
+        if (hasNavigationBar) {
             WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             switch (manager.getDefaultDisplay().getRotation()) {
                 case Surface.ROTATION_90:
@@ -190,39 +183,17 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
      * @return
      */
     private  boolean checkDeviceHasNavigationBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            Display display = windowManager.getDefaultDisplay();
-            DisplayMetrics realDisplayMetrics = new DisplayMetrics();
-            display.getRealMetrics(realDisplayMetrics);
-            int realHeight = realDisplayMetrics.heightPixels;
-            int realWidth = realDisplayMetrics.widthPixels;
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            display.getMetrics(displayMetrics);
-            int displayHeight = displayMetrics.heightPixels;
-            int displayWidth = displayMetrics.widthPixels;
-            return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
-        } else {
-            boolean hasNavigationBar = false;
-            Resources resources = getContext().getResources();
-            int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
-            if (id > 0) {
-                hasNavigationBar = resources.getBoolean(id);
-            }
-            try {
-                Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
-                Method m = systemPropertiesClass.getMethod("get", String.class);
-                String navBarOverride = (String) m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
-                if ("1".equals(navBarOverride)) {
-                    hasNavigationBar = false;
-                } else if ("0".equals(navBarOverride)) {
-                    hasNavigationBar = true;
-                }
-            } catch (Exception e) {
-                Log.e(TAG,"checkDeviceHasNavigationBar",e);
-            }
-            return hasNavigationBar;
-        }
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        display.getRealMetrics(realDisplayMetrics);
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
     @Override
     public void setBackgroundColor(int color) {

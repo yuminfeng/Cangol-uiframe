@@ -24,10 +24,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorInt;
-import androidx.annotation.IdRes;
-import androidx.fragment.app.Fragment;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,12 +32,16 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.EditText;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.fragment.app.Fragment;
+
 import java.lang.ref.WeakReference;
 
 import mobi.cangol.mobile.CoreApplication;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
-import mobi.cangol.mobile.service.session.Session;
 import mobi.cangol.mobile.service.session.SessionService;
 
 public abstract class BaseFragment extends Fragment {

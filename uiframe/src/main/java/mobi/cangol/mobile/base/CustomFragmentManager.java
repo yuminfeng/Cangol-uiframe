@@ -15,7 +15,6 @@
  */
 package mobi.cangol.mobile.base;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,25 +40,13 @@ public class CustomFragmentManager {
         public void run() {
             try {
                 if (fragmentTransaction != null && fActivity != null) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        if (!fActivity.isFinishing() && !fActivity.isDestroyed()) {
-                            try {
-                                fragmentTransaction.commitAllowingStateLoss();
-                                fragmentManager.executePendingTransactions();
-                                fragmentTransaction = null;
-                            } catch (IllegalStateException e) {
-                                Log.e(STATE_TAG, "execPendingTransactions", e);
-                            }
-                        }
-                    } else {
-                        if (!fActivity.isFinishing()) {
-                            try {
-                                fragmentTransaction.commitAllowingStateLoss();
-                                fragmentManager.executePendingTransactions();
-                                fragmentTransaction = null;
-                            } catch (IllegalStateException e) {
-                                Log.e(STATE_TAG, "execPendingTransactions", e);
-                            }
+                    if (!fActivity.isFinishing() && !fActivity.isDestroyed()) {
+                        try {
+                            fragmentTransaction.commitAllowingStateLoss();
+                            fragmentManager.executePendingTransactions();
+                            fragmentTransaction = null;
+                        } catch (IllegalStateException e) {
+                            Log.e(STATE_TAG, "execPendingTransactions", e);
                         }
                     }
                 }

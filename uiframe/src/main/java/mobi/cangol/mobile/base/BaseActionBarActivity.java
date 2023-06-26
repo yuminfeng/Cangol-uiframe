@@ -23,13 +23,14 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorInt;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 
 import java.lang.ref.WeakReference;
 

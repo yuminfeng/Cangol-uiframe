@@ -17,12 +17,12 @@ package mobi.cangol.mobile.base;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorInt;
 import android.widget.EditText;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+
 import mobi.cangol.mobile.service.AppService;
-import mobi.cangol.mobile.service.session.Session;
 import mobi.cangol.mobile.service.session.SessionService;
 
 public interface BaseActivityDelegate {

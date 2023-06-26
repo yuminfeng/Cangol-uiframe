@@ -1,6 +1,5 @@
 package mobi.cangol.mobile.uiframe.demo.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import mobi.cangol.mobile.base.BaseContentFragment;
-import mobi.cangol.mobile.base.BaseNavigationFragmentActivity;
 import mobi.cangol.mobile.navigation.TabDrawerNavigationFragmentActivity;
 import mobi.cangol.mobile.uiframe.demo.R;
 

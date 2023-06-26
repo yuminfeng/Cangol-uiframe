@@ -1,7 +1,8 @@
 package mobi.cangol.mobile.uiframe.demo.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import mobi.cangol.mobile.uiframe.demo.R;
 

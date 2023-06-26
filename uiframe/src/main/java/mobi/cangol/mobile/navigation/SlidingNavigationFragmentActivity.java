@@ -17,12 +17,13 @@ package mobi.cangol.mobile.navigation;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.slidingpanelayout.widget.SlidingPaneLayout.PanelSlideListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.slidingpanelayout.widget.SlidingPaneLayout.PanelSlideListener;
 
 import mobi.cangol.mobile.base.BaseNavigationFragmentActivity;
 import mobi.cangol.mobile.uiframe.R;

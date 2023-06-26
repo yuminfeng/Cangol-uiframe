@@ -1,14 +1,14 @@
 package mobi.cangol.mobile.uiframe.demo.fragment;
 
-import mobi.cangol.mobile.base.BaseContentFragment;
-import mobi.cangol.mobile.base.FragmentInfo;
-import mobi.cangol.mobile.uiframe.demo.R;
-import mobi.cangol.mobile.uiframe.demo.view.TabManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+
+import mobi.cangol.mobile.base.BaseContentFragment;
+import mobi.cangol.mobile.uiframe.demo.R;
+import mobi.cangol.mobile.uiframe.demo.view.TabManager;
 
 public class TabsFragment extends BaseContentFragment {
 	private TabManager  mTabManager;

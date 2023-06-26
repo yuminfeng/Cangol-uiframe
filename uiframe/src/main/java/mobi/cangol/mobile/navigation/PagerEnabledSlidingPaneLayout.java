@@ -16,11 +16,12 @@
 package mobi.cangol.mobile.navigation;
 
 import android.content.Context;
-import androidx.core.view.MotionEventCompat;
-import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+
+import androidx.core.view.MotionEventCompat;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 /**
  * SlidingPaneLayout that, if closed, checks if children can scroll before it intercepts

@@ -15,9 +15,10 @@
  */
 package mobi.cangol.mobile.uiframe.demo;
 
+import android.content.Context;
+
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.status.StatusListener;
-import android.content.Context;
 
 public class AppStatusListener implements StatusListener{
 

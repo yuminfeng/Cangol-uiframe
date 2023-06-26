@@ -6,8 +6,8 @@ import android.os.Bundle;
 
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.navigation.SlidingNavigationFragmentActivity;
-import mobi.cangol.mobile.uiframe.demo.R;
 import mobi.cangol.mobile.uiframe.demo.LeakSingleton;
+import mobi.cangol.mobile.uiframe.demo.R;
 import mobi.cangol.mobile.uiframe.demo.fragment.HomeFragment;
 import mobi.cangol.mobile.uiframe.demo.fragment.ItemFragment;
 import mobi.cangol.mobile.uiframe.demo.fragment.MenuFragment;

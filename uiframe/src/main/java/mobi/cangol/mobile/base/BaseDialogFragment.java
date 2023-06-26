@@ -22,12 +22,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.view.LayoutInflater;
-import android.view.View;
 
 /**
  * Created by weixuewu on 15/10/26.

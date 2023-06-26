@@ -1,15 +1,17 @@
 package mobi.cangol.mobile.uiframe.demo.view;
 
-import java.util.HashMap;
-
-import mobi.cangol.mobile.base.BaseFragment;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import java.util.HashMap;
+
+import mobi.cangol.mobile.base.BaseFragment;
 /**
  * @Description:
  * @version $Revision: 1.0 $

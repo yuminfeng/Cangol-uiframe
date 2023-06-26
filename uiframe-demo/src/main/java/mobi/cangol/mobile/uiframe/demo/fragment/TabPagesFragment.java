@@ -1,11 +1,12 @@
 package mobi.cangol.mobile.uiframe.demo.fragment;
 
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+
+import androidx.viewpager.widget.ViewPager;
 
 import mobi.cangol.mobile.base.BaseContentFragment;
 import mobi.cangol.mobile.uiframe.demo.R;
