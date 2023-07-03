@@ -22,8 +22,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import mobi.cangol.mobile.uiframe.R;
 
 
-public class TabMenuDrawerLayout extends DrawerLayout  {
-    private static final String TAG="TabMenuDrawerLayout";
+public class TabMenuDrawerLayout extends DrawerLayout {
+    private static final String TAG = "TabMenuDrawerLayout";
     private LinearLayout mRootView;
     private FrameLayout mLeftView;
     private FrameLayout mRightView;
@@ -37,7 +37,7 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
         mRightView = new FrameLayout(context);
         mMaskView = new FrameLayout(context);
 
-        mRootView= (LinearLayout) LayoutInflater.from(context).inflate(R.layout.navigation_tab_main, null);
+        mRootView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.navigation_tab_main, null);
         LayoutParams lp1 = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         lp1.gravity = Gravity.NO_GRAVITY;
         mRootView.setId(R.id.main_view);
@@ -76,17 +76,17 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
     }
 
     public void displayMaskView(boolean show) {
-        this.mMaskView.setVisibility(show?VISIBLE:GONE);
+        this.mMaskView.setVisibility(show ? VISIBLE : GONE);
     }
 
     public void showDrawer(int gravity, boolean show) {
         if (show) {
-            if(gravity==Gravity.LEFT&&mLeftView.getChildCount()>0){
+            if (gravity == Gravity.LEFT && mLeftView.getChildCount() > 0) {
                 this.openDrawer(gravity);
-            }else if(gravity==Gravity.RIGHT&&mRightView.getChildCount()>0){
+            } else if (gravity == Gravity.RIGHT && mRightView.getChildCount() > 0) {
                 this.openDrawer(gravity);
-            }else{
-                Log.e("showDrawer","gravity is not LEFT|RIGHT,drawer is empty");
+            } else {
+                Log.e("showDrawer", "gravity is not LEFT|RIGHT,drawer is empty");
             }
         } else {
             this.closeDrawer(gravity);
@@ -100,9 +100,10 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
     public void setDrawerEnable(int gravity, boolean enable) {
         this.setDrawerLockMode(enable ? DrawerLayout.LOCK_MODE_UNLOCKED : DrawerLayout.LOCK_MODE_LOCKED_CLOSED, gravity);
     }
+
     @Override
     protected boolean fitSystemWindows(Rect rect) {
-        Log.d(TAG,"fitSystemWindows "+rect.toString());
+        Log.d(TAG, "fitSystemWindows " + rect.toString());
         if (isFloatActionBarEnabled) {
             fitPadding(rect);
             fitDecorChild(this);
@@ -110,36 +111,36 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
         return true;
     }
 
-    private void fitDecorChild(View view){
-        ViewGroup contentView=  view.findViewById(R.id.actionbar_content_view);
-        if(contentView!=null){
-            ViewGroup decorChild= (ViewGroup)contentView.getChildAt(0);
-            if(decorChild != null) {
-                    WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-                    FrameLayout.LayoutParams layoutParams=(FrameLayout.LayoutParams)decorChild.getLayoutParams();
-                    switch (manager.getDefaultDisplay().getRotation()) {
-                        case Surface.ROTATION_90:
-                            layoutParams.rightMargin=0;
-                            break;
-                        case Surface.ROTATION_180:
-                            layoutParams.topMargin=0;
-                            break;
-                        case Surface.ROTATION_270:
-                            layoutParams.leftMargin=0;
-                            break;
-                        default:
-                            layoutParams.bottomMargin=0;
-                            break;
-                    }
-                    decorChild.setLayoutParams(layoutParams);
+    private void fitDecorChild(View view) {
+        ViewGroup contentView = view.findViewById(R.id.actionbar_content_view);
+        if (contentView != null) {
+            ViewGroup decorChild = (ViewGroup) contentView.getChildAt(0);
+            if (decorChild != null) {
+                WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) decorChild.getLayoutParams();
+                switch (manager.getDefaultDisplay().getRotation()) {
+                    case Surface.ROTATION_90:
+                        layoutParams.rightMargin = 0;
+                        break;
+                    case Surface.ROTATION_180:
+                        layoutParams.topMargin = 0;
+                        break;
+                    case Surface.ROTATION_270:
+                        layoutParams.leftMargin = 0;
+                        break;
+                    default:
+                        layoutParams.bottomMargin = 0;
+                        break;
+                }
+                decorChild.setLayoutParams(layoutParams);
             }
         }
     }
 
     private void fitPadding(Rect rect) {
-        Log.d(TAG,"fitPadding "+rect.toString());
-        boolean hasNavigationBar=checkDeviceHasNavigationBar();
-        Log.d(TAG,"checkDeviceHasNavigationBar="+hasNavigationBar);
+        Log.d(TAG, "fitPadding " + rect.toString());
+        boolean hasNavigationBar = checkDeviceHasNavigationBar();
+        Log.d(TAG, "checkDeviceHasNavigationBar=" + hasNavigationBar);
         if (hasNavigationBar) {
             WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             switch (manager.getDefaultDisplay().getRotation()) {
@@ -166,9 +167,11 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
     private int getNavBarWidth() {
         return getNavBarDimen("navigation_bar_width");
     }
+
     private int getNavBarHeight() {
         return getNavBarDimen("navigation_bar_height");
     }
+
     private int getNavBarDimen(String resourceString) {
         Resources r = getResources();
         int id = r.getIdentifier(resourceString, "dimen", "android");
@@ -178,11 +181,13 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
             return 0;
         }
     }
+
     /**
      * 检测是否具有底部导航栏
+     *
      * @return
      */
-    private  boolean checkDeviceHasNavigationBar() {
+    private boolean checkDeviceHasNavigationBar() {
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics realDisplayMetrics = new DisplayMetrics();
@@ -195,6 +200,7 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
         int displayWidth = displayMetrics.widthPixels;
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
+
     @Override
     public void setBackgroundColor(int color) {
         super.setBackgroundColor(color);
@@ -208,6 +214,7 @@ public class TabMenuDrawerLayout extends DrawerLayout  {
         mRightView.setBackgroundResource(resId);
         mLeftView.setBackgroundResource(resId);
     }
+
     public void attachToActivity(Activity activity, boolean isFloatActionBarEnabled) {
         this.isFloatActionBarEnabled = isFloatActionBarEnabled;
 

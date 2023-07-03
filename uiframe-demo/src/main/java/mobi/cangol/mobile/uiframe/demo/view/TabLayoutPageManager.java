@@ -38,6 +38,7 @@ public class TabLayoutPageManager extends FragmentStatePagerAdapter implements
         mTabLayout.addOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(this);
     }
+
     public void addTab(int tabId, TabLayout.Tab tab, Class<?> clazz, Bundle args) {
         String tag = "" + tabId;
         tab.setTag(tag);
@@ -53,12 +54,13 @@ public class TabLayoutPageManager extends FragmentStatePagerAdapter implements
         TabInfo info = mTabs.get(mViewPager.getCurrentItem());
         return mFragmentManager.findFragmentByTag(info.tag);
     }
+
     public void removeTab(int tabId) {
         String tag = "" + tabId;
-        if (!mTabs.contains(tag)){
+        if (!mTabs.contains(tag)) {
             //not found~!
             return;
-        }else{
+        } else {
             mTabs.remove(tag);
             mTabLayout.removeTabAt(tabId);
         }
@@ -89,7 +91,7 @@ public class TabLayoutPageManager extends FragmentStatePagerAdapter implements
     }
 
     public void onPageSelected(int position) {
-        mTabLayout.setScrollPosition(position,0,true);
+        mTabLayout.setScrollPosition(position, 0, true);
     }
 
     public void onPageScrollStateChanged(int state) {

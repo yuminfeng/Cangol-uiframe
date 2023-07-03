@@ -50,6 +50,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     private HandlerThread handlerThread;
     private Handler threadHandler;
     private Handler uiHandler;
+
     public float getIdleTime() {
         return (System.currentTimeMillis() - startTime) / 1000.0f;
     }
@@ -62,8 +63,8 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
         startTime = System.currentTimeMillis();
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        threadHandler = new InternalHandler(this,handlerThread.getLooper());
-        uiHandler= new InternalHandler(this,Looper.getMainLooper());
+        threadHandler = new InternalHandler(this, handlerThread.getLooper());
+        uiHandler = new InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
         getCustomActionBar().setDisplayShowHomeEnabled(true);
@@ -71,19 +72,24 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
 
     @Override
     public void showToast(int resId) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
+        if (!isFinishing())
+            Toast.makeText(this.getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void showToast(String str) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+        if (!isFinishing())
+            Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void showToast(int resId, int duration) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), resId, duration).show();
+        if (!isFinishing()) Toast.makeText(this.getApplicationContext(), resId, duration).show();
     }
+
     @Override
     public void showToast(String str, int duration) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), str, duration).show();
+        if (!isFinishing()) Toast.makeText(this.getApplicationContext(), str, duration).show();
     }
 
     /**
@@ -111,16 +117,17 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
         if (null == stack) {
             throw new IllegalStateException("stack is null");
-        }else if(!stack.isStateSaved()){
+        } else if (!stack.isStateSaved()) {
             stack.replace(fragmentClass, tag, args);
             stack.commit();
-        }else{
-            Log.e(TAG,"Can not perform this action after onSaveInstanceState");
+        } else {
+            Log.e(TAG, "Can not perform this action after onSaveInstanceState");
         }
     }
+
     @Override
-    public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args,int moduleId) {
-        this.replaceFragment(fragmentClass,tag,args);
+    public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int moduleId) {
+        this.replaceFragment(fragmentClass, tag, args);
     }
 
     @Override
@@ -140,12 +147,12 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             return super.onKeyUp(keyCode, event);
-        }else {
-            if(stack.peek().onKeyUp(keyCode, event)){
+        } else {
+            if (stack.peek().onKeyUp(keyCode, event)) {
                 return true;
-            }else {
+            } else {
                 return super.onKeyUp(keyCode, event);
             }
         }
@@ -153,12 +160,12 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             return super.onKeyDown(keyCode, event);
-        }else {
-            if(stack.peek().onKeyDown(keyCode, event)){
+        } else {
+            if (stack.peek().onKeyDown(keyCode, event)) {
                 return true;
-            }else {
+            } else {
                 return super.onKeyDown(keyCode, event);
             }
         }
@@ -171,6 +178,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
         imm.showSoftInput(editText, 0);
         editText.setText(null);
     }
+
     @Override
     public void hideSoftInput() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -178,21 +186,23 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
             imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
     @Override
     public void hideSoftInput(EditText editText) {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
     @Override
     public void onMenuActionCreated(ActionMenu actionMenu) {
-        if (stack != null && stack.size() > 0&&null!=stack.peek()&&stack.peek().isEnable()) {
+        if (stack != null && stack.size() > 0 && null != stack.peek() && stack.peek().isEnable()) {
             ((BaseContentFragment) stack.peek()).onMenuActionCreated(actionMenu);
         }
     }
 
     @Override
     public boolean onMenuActionSelected(ActionMenuItem action) {
-        if (null != stack&& null!=stack.peek()&&stack.peek().isEnable()&& stack.peek().isVisible()) {
+        if (null != stack && null != stack.peek() && stack.peek().isEnable() && stack.peek().isVisible()) {
             return ((BaseContentFragment) stack.peek()).onMenuActionSelected(action);
         }
         return false;
@@ -201,13 +211,13 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     @Override
     public final void onBackPressed() {
         Log.v(TAG, "onBackPressed ");
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             onBack();
-        }else {
-            if (!stack.peek().onBackPressed()){
-                if (stack.size() == 1)  {
+        } else {
+            if (!stack.peek().onBackPressed()) {
+                if (stack.size() == 1) {
                     onBack();
-                }else{
+                } else {
                     stack.popBackStack();
                 }
             }
@@ -217,15 +227,15 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     @Override
     public boolean onSupportNavigateUp() {
         Log.v(TAG, "onSupportNavigateUp ");
-        if (stack == null||stack.size()==0||stack.peek()==null) {
+        if (stack == null || stack.size() == 0 || stack.peek() == null) {
             return super.onSupportNavigateUp();
-        }else{
+        } else {
             if (stack.peek().onSupportNavigateUp()) {
                 return true;
             } else {
                 if (stack.size() == 1) {
                     return super.onSupportNavigateUp();
-                } else{
+                } else {
                     FragmentInfo upFragment = stack.peek().getNavigtionUpToFragment();
                     if (upFragment != null) {
                         stack.popBackStack();
@@ -271,8 +281,8 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
 
     @Override
     protected void onDestroy() {
-        Log.v(TAG, "onDestroy" );
-        if (null != stack)stack.destroy();
+        Log.v(TAG, "onDestroy");
+        if (null != stack) stack.destroy();
         app.delActivityFromManager(this);
         handlerThread.quit();
         super.onDestroy();
@@ -326,22 +336,25 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler!= null && runnable != null)
+        if (threadHandler != null && runnable != null)
             threadHandler.post(runnable);
     }
+
     protected void handleMessage(Message msg) {
         //do somethings
     }
-    protected  static class StaticInnerRunnable implements Runnable{
+
+    protected static class StaticInnerRunnable implements Runnable {
         @Override
         public void run() {
             //do somethings
         }
     }
-    static final  class InternalHandler extends Handler {
+
+    static final class InternalHandler extends Handler {
         private final WeakReference<Context> mContext;
 
-        public InternalHandler(Context context,Looper looper) {
+        public InternalHandler(Context context, Looper looper) {
             super(looper);
             mContext = new WeakReference<>(context);
         }
@@ -349,14 +362,14 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
         public void handleMessage(Message msg) {
             Context context = mContext.get();
             if (context != null) {
-                ((BaseActionBarActivity)context).handleMessage(msg);
+                ((BaseActionBarActivity) context).handleMessage(msg);
             }
         }
     }
 
     @ColorInt
     @Override
-    public  int getThemeAttrColor(@AttrRes int colorAttr) {
+    public int getThemeAttrColor(@AttrRes int colorAttr) {
         TypedArray array = this.obtainStyledAttributes(null, new int[]{colorAttr});
         try {
             return array.getColor(0, 0);

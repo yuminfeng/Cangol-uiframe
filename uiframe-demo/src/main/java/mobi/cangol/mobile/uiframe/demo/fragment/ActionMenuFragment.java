@@ -49,9 +49,9 @@ public class ActionMenuFragment extends BaseContentFragment {
         getUiHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                setContentFragment(CleanFragment.class,null);
+                setContentFragment(CleanFragment.class, null);
             }
-        },2000L);
+        }, 2000L);
     }
 
     @Override

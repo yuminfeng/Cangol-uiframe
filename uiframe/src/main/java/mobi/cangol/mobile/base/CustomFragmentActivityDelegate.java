@@ -19,6 +19,7 @@ public interface CustomFragmentActivityDelegate {
      * @param args
      */
     void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args);
+
     /**
      * fragment
      *
@@ -27,7 +28,8 @@ public interface CustomFragmentActivityDelegate {
      * @param args
      * @param moduleId
      */
-    void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args,int moduleId);
+    void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int moduleId);
+
     /**
      * 获取自定栈管理器
      *

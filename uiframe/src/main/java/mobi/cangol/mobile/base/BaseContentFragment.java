@@ -50,9 +50,9 @@ public abstract class BaseContentFragment extends BaseFragment {
     public ActionBar getCustomActionBar() {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof ActionBarActivity ){
-            return  ((ActionBarActivity) this.getActivity()).getCustomActionBar();
-        }else{
+        } else if (getActivity() instanceof ActionBarActivity) {
+            return ((ActionBarActivity) this.getActivity()).getCustomActionBar();
+        } else {
             throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
         }
     }
@@ -95,6 +95,7 @@ public abstract class BaseContentFragment extends BaseFragment {
         super.onDestroyView();
         this.setTitle("");
     }
+
     /**
      * 设置状态栏颜色
      *
@@ -103,9 +104,9 @@ public abstract class BaseContentFragment extends BaseFragment {
     public void setStatusBarColor(int color) {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof ActionBarActivity ){
-            ((ActionBarActivity)getActivity()).setStatusBarTintColor(color);
-        }else{
+        } else if (getActivity() instanceof ActionBarActivity) {
+            ((ActionBarActivity) getActivity()).setStatusBarTintColor(color);
+        } else {
             throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
         }
     }
@@ -118,9 +119,9 @@ public abstract class BaseContentFragment extends BaseFragment {
     public void setNavigationBarTintColor(int color) {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof ActionBarActivity ){
-            ((ActionBarActivity)getActivity()).setNavigationBarTintColor(color);
-        }else{
+        } else if (getActivity() instanceof ActionBarActivity) {
+            ((ActionBarActivity) getActivity()).setNavigationBarTintColor(color);
+        } else {
             throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
         }
     }
@@ -131,9 +132,9 @@ public abstract class BaseContentFragment extends BaseFragment {
     public void enableRefresh(boolean enable) {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof ActionBarActivity ){
-            ((ActionBarActivity)getActivity()).getCustomActionBar().enableRefresh(enable);
-        }else{
+        } else if (getActivity() instanceof ActionBarActivity) {
+            ((ActionBarActivity) getActivity()).getCustomActionBar().enableRefresh(enable);
+        } else {
             throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
         }
     }
@@ -144,9 +145,9 @@ public abstract class BaseContentFragment extends BaseFragment {
     public void refreshing(boolean refreshing) {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof ActionBarActivity ){
-            ((ActionBarActivity)getActivity()).getCustomActionBar().refreshing(refreshing);
-        }else{
+        } else if (getActivity() instanceof ActionBarActivity) {
+            ((ActionBarActivity) getActivity()).getCustomActionBar().refreshing(refreshing);
+        } else {
             throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
         }
     }
@@ -160,9 +161,9 @@ public abstract class BaseContentFragment extends BaseFragment {
     public ActionMode startCustomActionMode(ActionMode.Callback callback) {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof ActionBarActivity ){
-            return ((ActionBarActivity)getActivity()).startCustomActionMode(callback);
-        }else{
+        } else if (getActivity() instanceof ActionBarActivity) {
+            return ((ActionBarActivity) getActivity()).startCustomActionMode(callback);
+        } else {
             throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
         }
     }
@@ -173,10 +174,10 @@ public abstract class BaseContentFragment extends BaseFragment {
      *
      * @param enable
      */
-    protected final  void setMenuEnable(boolean enable) {
+    protected final void setMenuEnable(boolean enable) {
         BaseContentFragment parent = (BaseContentFragment) this.getParentFragment();
         if (parent == null) {
-            if (getActivity()!=null&&this.getParentFragment() == null) {
+            if (getActivity() != null && this.getParentFragment() == null) {
                 if (this.getActivity() instanceof BaseNavigationFragmentActivity) {
                     BaseNavigationFragmentActivity bfActivity = (BaseNavigationFragmentActivity) this.getActivity();
                     bfActivity.setMenuEnable(enable);
@@ -187,28 +188,28 @@ public abstract class BaseContentFragment extends BaseFragment {
         }
     }
 
-    protected final  void notifyMenuChange(int moduleId) {
+    protected final void notifyMenuChange(int moduleId) {
         if (getActivity() == null) {
             throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-        } else if(getActivity() instanceof BaseNavigationFragmentActivity ){
+        } else if (getActivity() instanceof BaseNavigationFragmentActivity) {
             BaseNavigationFragmentActivity bfActivity = (BaseNavigationFragmentActivity) this.getActivity();
             bfActivity.setCurrentModuleId(moduleId);
         }
     }
 
-    private final  void setActionBarUpIndicator() {
+    private final void setActionBarUpIndicator() {
         BaseContentFragment parent = (BaseContentFragment) this.getParentFragment();
         if (parent == null) {
             if (getActivity() == null) {
                 throw new IllegalStateException(GET_ACTIVITY_IS_NULL);
-            } else if(getActivity() instanceof ActionBarActivity ){
+            } else if (getActivity() instanceof ActionBarActivity) {
                 ActionBarActivity bfActivity = (ActionBarActivity) this.getActivity();
                 if (isCleanStack()) {
                     bfActivity.getCustomActionBar().displayHomeIndicator();
                 } else {
                     bfActivity.getCustomActionBar().displayUpIndicator();
                 }
-            }else{
+            } else {
                 throw new IllegalStateException(GET_ACTIVITY_IS_NOT);
             }
         }
@@ -270,15 +271,15 @@ public abstract class BaseContentFragment extends BaseFragment {
      * @return
      */
     public boolean onMenuActionSelected(ActionMenuItem action) {
-        if(this.getChildFragmentManager()!=null&&
-                this.getChildFragmentManager().getFragments()!=null&&
-                !this.getChildFragmentManager().getFragments().isEmpty()){
-            int size=getChildFragmentManager().getFragments().size();
-            for (int i = size-1; i >=0; i--) {
-                Fragment fragment=getChildFragmentManager().getFragments().get(i);
-                if(fragment instanceof BaseContentFragment){
-                    if(((BaseContentFragment) fragment).isEnable()
-                            &&fragment.isVisible()){
+        if (this.getChildFragmentManager() != null &&
+                this.getChildFragmentManager().getFragments() != null &&
+                !this.getChildFragmentManager().getFragments().isEmpty()) {
+            int size = getChildFragmentManager().getFragments().size();
+            for (int i = size - 1; i >= 0; i--) {
+                Fragment fragment = getChildFragmentManager().getFragments().get(i);
+                if (fragment instanceof BaseContentFragment) {
+                    if (((BaseContentFragment) fragment).isEnable()
+                            && fragment.isVisible()) {
                         return ((BaseContentFragment) fragment).onMenuActionSelected(action);
                     }
                 }
@@ -286,15 +287,17 @@ public abstract class BaseContentFragment extends BaseFragment {
         }
         return false;
     }
+
     /**
      * 设置顶级content fragment
      *
      * @param fragmentClass
      * @param args
      */
-    public final  void setContentFragment(Class<? extends BaseContentFragment> fragmentClass,Bundle args) {
-        this.setContentFragment(fragmentClass,fragmentClass.getName(),args);
+    public final void setContentFragment(Class<? extends BaseContentFragment> fragmentClass, Bundle args) {
+        this.setContentFragment(fragmentClass, fragmentClass.getName(), args);
     }
+
     /**
      * 设置顶级content fragment
      *
@@ -302,11 +305,11 @@ public abstract class BaseContentFragment extends BaseFragment {
      * @param tag
      * @param args
      */
-    public final  void setContentFragment(Class<? extends BaseContentFragment> fragmentClass, String tag, Bundle args) {
+    public final void setContentFragment(Class<? extends BaseContentFragment> fragmentClass, String tag, Bundle args) {
         if (this.getActivity() instanceof CustomFragmentActivityDelegate) {
             CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
             bfActivity.replaceFragment(fragmentClass, tag, args);
-        }else{
+        } else {
             replaceFragment(fragmentClass, tag, args);
         }
     }
@@ -319,11 +322,11 @@ public abstract class BaseContentFragment extends BaseFragment {
      * @param args
      * @param moduleId
      */
-    public final  void setContentFragment(Class<? extends BaseContentFragment> fragmentClass, String tag, Bundle args, int moduleId) {
+    public final void setContentFragment(Class<? extends BaseContentFragment> fragmentClass, String tag, Bundle args, int moduleId) {
         if (this.getActivity() instanceof CustomFragmentActivityDelegate) {
             CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
-            bfActivity.replaceFragment(fragmentClass, tag, args,moduleId);
-        }else{
+            bfActivity.replaceFragment(fragmentClass, tag, args, moduleId);
+        } else {
             replaceFragment(fragmentClass, tag, args);
         }
         notifyMenuChange(moduleId);
@@ -331,9 +334,10 @@ public abstract class BaseContentFragment extends BaseFragment {
 
     /**
      * 获取父类 BaseContentFragment
+     *
      * @return
      */
-    public final  BaseContentFragment getParentContentFragment() {
+    public final BaseContentFragment getParentContentFragment() {
         return (BaseContentFragment) getParentFragment();
     }
 

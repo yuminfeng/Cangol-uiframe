@@ -7,22 +7,25 @@ package mobi.cangol.mobile.uiframe.demo;
 public class LeakSingleton {
     private static final LeakSingleton ourInstance = new LeakSingleton();
 
-    public  static LeakSingleton getInstance() {
+    public static LeakSingleton getInstance() {
         return ourInstance;
     }
 
     private LeakSingleton() {
     }
+
     private OnTestListener onListener;
 
     public void setOnTestListener(OnTestListener onListener) {
         this.onListener = onListener;
     }
-    public void notifyTest(){
-        if(onListener!=null)
+
+    public void notifyTest() {
+        if (onListener != null)
             onListener.onTest();
     }
-    public interface OnTestListener{
+
+    public interface OnTestListener {
         void onTest();
     }
 }

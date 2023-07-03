@@ -31,37 +31,37 @@ public class FragmentStack {
     }
 
     public BaseFragment peekFragment() {
-        return stack.isEmpty()?null:stack.peek();
+        return stack.isEmpty() ? null : stack.peek();
     }
 
     public String peekTag() {
-        return tagStack.isEmpty()?null:tagStack.peek();
+        return tagStack.isEmpty() ? null : tagStack.peek();
     }
 
     public BaseFragment popFragment() {
 
-        return stack.isEmpty()?null:stack.pop();
+        return stack.isEmpty() ? null : stack.pop();
     }
 
-    public void popFragment(String tag,int flag) {
-        if(TextUtils.isEmpty(tag)){
-            if(flag==1){
+    public void popFragment(String tag, int flag) {
+        if (TextUtils.isEmpty(tag)) {
+            if (flag == 1) {
                 while (stack.size() > 1) {
                     stack.pop();
                     tagStack.pop();
                 }
-            }else{
+            } else {
                 stack.pop();
                 tagStack.pop();
             }
-        }else{
-            int index=tagStack.indexOf(tag);
-            if(index>0){
+        } else {
+            int index = tagStack.indexOf(tag);
+            if (index > 0) {
                 while (!tag.equals(tagStack.peek())) {
                     tagStack.pop();
                     stack.pop();
                 }
-                if(flag==1){
+                if (flag == 1) {
                     tagStack.pop();
                     stack.pop();
                 }
@@ -70,10 +70,10 @@ public class FragmentStack {
     }
 
     public String popTag() {
-        return tagStack.isEmpty()?null:tagStack.pop();
+        return tagStack.isEmpty() ? null : tagStack.pop();
     }
 
-    public boolean containsTag(String tag){
+    public boolean containsTag(String tag) {
         return tagStack.contains(tag);
     }
 

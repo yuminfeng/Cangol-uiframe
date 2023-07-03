@@ -77,8 +77,8 @@ public class HomeFragment extends BaseContentFragment {
                 String name = (String) parent.getItemAtPosition(position);
                 String className = "mobi.cangol.mobile.uiframe.demo.fragment." + name + "Fragment";
                 try {
-                    if("Result".equals(name))
-                        replaceFragmentForResult((Class<? extends BaseContentFragment>) Class.forName(className), name + "Fragment", null,1);
+                    if ("Result".equals(name))
+                        replaceFragmentForResult((Class<? extends BaseContentFragment>) Class.forName(className), name + "Fragment", null, 1);
                     else
                         setContentFragment((Class<? extends BaseContentFragment>) Class.forName(className), name + "Fragment", null);
                 } catch (ClassNotFoundException e) {

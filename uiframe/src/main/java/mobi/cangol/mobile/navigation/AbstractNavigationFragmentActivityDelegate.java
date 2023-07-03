@@ -127,12 +127,14 @@ public abstract class AbstractNavigationFragmentActivityDelegate {
 
     /**
      * 获取蒙版view
+     *
      * @return
      */
     public abstract FrameLayout getMaskView();
 
     /**
      * 显示或隐藏蒙板
+     *
      * @param show
      */
     public abstract void displayMaskView(boolean show);

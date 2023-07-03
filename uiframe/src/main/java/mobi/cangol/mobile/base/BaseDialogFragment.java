@@ -68,7 +68,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
     }
 
     public void show(FragmentManager manager, String tag) {
-        if(isStateSaved())return;
+        if (isStateSaved()) return;
         this.mDismissed = false;
         this.mShownByMe = true;
         FragmentTransaction ft = manager.beginTransaction();
@@ -86,12 +86,12 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
     }
 
     public void dismiss() {
-        if(!isStateSaved())
+        if (!isStateSaved())
             this.dismissInternal(false);
     }
 
     public void dismissAllowingStateLoss() {
-        if(!isStateSaved())this.dismissInternal(true);
+        if (!isStateSaved()) this.dismissInternal(true);
     }
 
     void dismissInternal(boolean allowStateLoss) {
@@ -155,6 +155,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
         }
 
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -234,6 +235,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
 
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -274,6 +276,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
         }
 
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -282,6 +285,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
         }
 
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -296,7 +300,7 @@ public abstract class BaseDialogFragment extends BaseFragment implements DialogI
 
     @ColorInt
     @Override
-    public  int getThemeAttrColor(@AttrRes int colorAttr) {
+    public int getThemeAttrColor(@AttrRes int colorAttr) {
         TypedArray array = getContext().obtainStyledAttributes(null, new int[]{colorAttr});
         try {
             return array.getColor(0, 0);

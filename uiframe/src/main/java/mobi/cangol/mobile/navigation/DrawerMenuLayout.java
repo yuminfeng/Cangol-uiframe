@@ -35,7 +35,7 @@ import mobi.cangol.mobile.uiframe.R;
 
 
 public class DrawerMenuLayout extends DrawerLayout {
-    private static final String TAG="DrawerMenuLayout";
+    private static final String TAG = "DrawerMenuLayout";
     private FrameLayout mContentView;
     private FrameLayout mMenuView;
     private FrameLayout mMaskView;
@@ -66,7 +66,6 @@ public class DrawerMenuLayout extends DrawerLayout {
         this.addView(mMenuView, lp2);
 
 
-
     }
 
     public int getMenuFrameId() {
@@ -89,12 +88,13 @@ public class DrawerMenuLayout extends DrawerLayout {
         mContentView.removeAllViews();
         mContentView.addView(v);
     }
+
     public FrameLayout getMaskView() {
         return mMaskView;
     }
 
     public void displayMaskView(boolean show) {
-        this.mMaskView.setVisibility(show?VISIBLE:GONE);
+        this.mMaskView.setVisibility(show ? VISIBLE : GONE);
     }
 
     public void showMenu(boolean show) {
@@ -122,33 +122,35 @@ public class DrawerMenuLayout extends DrawerLayout {
         }
         return true;
     }
-    private void fitDecorChild(View view){
-        ViewGroup contentView= view.findViewById(R.id.actionbar_content_view);
-        if(contentView!=null){
-            ViewGroup decorChild= (ViewGroup)contentView.getChildAt(0);
-            if(decorChild != null){
-                    WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-                    FrameLayout.LayoutParams layoutParams=(FrameLayout.LayoutParams)decorChild.getLayoutParams();
-                    switch (manager.getDefaultDisplay().getRotation()) {
-                        case Surface.ROTATION_90:
-                            layoutParams.rightMargin=0;
-                            break;
-                        case Surface.ROTATION_180:
-                            layoutParams.topMargin=0;
-                            break;
-                        case Surface.ROTATION_270:
-                            layoutParams.leftMargin=0;
-                            break;
-                        default:
-                            layoutParams.bottomMargin=0;
-                            break;
-                    }
-                    decorChild.setLayoutParams(layoutParams);
+
+    private void fitDecorChild(View view) {
+        ViewGroup contentView = view.findViewById(R.id.actionbar_content_view);
+        if (contentView != null) {
+            ViewGroup decorChild = (ViewGroup) contentView.getChildAt(0);
+            if (decorChild != null) {
+                WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) decorChild.getLayoutParams();
+                switch (manager.getDefaultDisplay().getRotation()) {
+                    case Surface.ROTATION_90:
+                        layoutParams.rightMargin = 0;
+                        break;
+                    case Surface.ROTATION_180:
+                        layoutParams.topMargin = 0;
+                        break;
+                    case Surface.ROTATION_270:
+                        layoutParams.leftMargin = 0;
+                        break;
+                    default:
+                        layoutParams.bottomMargin = 0;
+                        break;
                 }
+                decorChild.setLayoutParams(layoutParams);
+            }
         }
     }
+
     private void fitPadding(Rect rect) {
-        boolean hasNavigationBar=checkDeviceHasNavigationBar();
+        boolean hasNavigationBar = checkDeviceHasNavigationBar();
         if (hasNavigationBar) {
             WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             switch (manager.getDefaultDisplay().getRotation()) {
@@ -170,11 +172,13 @@ public class DrawerMenuLayout extends DrawerLayout {
         mMenuView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
         mMaskView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
     }
+
     /**
      * 检测是否具有底部导航栏
+     *
      * @return
      */
-    private  boolean checkDeviceHasNavigationBar() {
+    private boolean checkDeviceHasNavigationBar() {
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics realDisplayMetrics = new DisplayMetrics();
@@ -187,12 +191,15 @@ public class DrawerMenuLayout extends DrawerLayout {
         int displayWidth = displayMetrics.widthPixels;
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
+
     private int getNavBarWidth() {
         return getNavBarDimen("navigation_bar_width");
     }
+
     private int getNavBarHeight() {
         return getNavBarDimen("navigation_bar_height");
     }
+
     private int getNavBarDimen(String resourceString) {
         Resources r = getResources();
         int id = r.getIdentifier(resourceString, "dimen", "android");
@@ -202,6 +209,7 @@ public class DrawerMenuLayout extends DrawerLayout {
             return 0;
         }
     }
+
     @Override
     public void setBackgroundColor(int color) {
         super.setBackgroundColor(color);

@@ -98,11 +98,12 @@ public interface BaseActivityDelegate {
      * @param fullscreen
      */
     void setFullScreen(boolean fullscreen);
+
     /**
      * 是否是全屏
-     *
      */
     boolean isFullScreen();
+
     /**
      * back按钮回调
      */
@@ -118,13 +119,11 @@ public interface BaseActivityDelegate {
 
     /**
      * 隐藏软键盘
-     *
      */
-     void hideSoftInput();
+    void hideSoftInput();
 
     /**
      * 隐藏软键盘
-     *
      */
     void hideSoftInput(EditText editText);
 

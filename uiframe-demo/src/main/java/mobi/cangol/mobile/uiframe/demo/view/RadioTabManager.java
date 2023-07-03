@@ -12,18 +12,20 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.HashMap;
 
 import mobi.cangol.mobile.base.BaseFragment;
+
 /**
- * @Description:
- * @version $Revision: 1.0 $
  * @author Cangol
+ * @version $Revision: 1.0 $
+ * @Description:
  */
 public class RadioTabManager implements OnCheckedChangeListener {
-	private static final String CUR_TAG = "RadioTabManager_TabId";
+    private static final String CUR_TAG = "RadioTabManager_TabId";
     protected final HashMap<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
     private TabInfo mLastTab;
-    private  FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;
     private final RadioGroup mRadioGroup;
     private final int mContainerId;
+
     public static final class TabInfo {
         private final String tag;
         private final Class<?> clss;
@@ -38,48 +40,53 @@ public class RadioTabManager implements OnCheckedChangeListener {
     }
 
     public RadioTabManager(FragmentManager fragmentManager, RadioGroup radioGroup, int containerId) {
-    	mFragmentManager =  fragmentManager;
+        mFragmentManager = fragmentManager;
         mRadioGroup = radioGroup;
         mContainerId = containerId;
         mRadioGroup.setOnCheckedChangeListener(this);
     }
-	public void setFragmentManager(FragmentManager mFragmentManager) {
-		this.mFragmentManager = mFragmentManager;
-	}
 
-	public void onSaveState(Bundle outState) {
-		outState.putInt(CUR_TAG, mRadioGroup.getCheckedRadioButtonId());
-	}
+    public void setFragmentManager(FragmentManager mFragmentManager) {
+        this.mFragmentManager = mFragmentManager;
+    }
 
-	public void restoreState(Bundle state) {
-		int tabId=state.getInt(CUR_TAG);
-		//setCurrentTab(tabId);
-	}
-    public void setCurrentTab(int checkedId){
-    	((RadioButton) mRadioGroup.findViewById(checkedId)).setChecked(true);
+    public void onSaveState(Bundle outState) {
+        outState.putInt(CUR_TAG, mRadioGroup.getCheckedRadioButtonId());
     }
-    public BaseFragment getCurrentTab(){
-    	if(mLastTab!=null){
-    		return mLastTab.fragment;
-    	}
-    	return null;
+
+    public void restoreState(Bundle state) {
+        int tabId = state.getInt(CUR_TAG);
+        //setCurrentTab(tabId);
     }
-    public void addTab(int radioButtonId, Class<?> clss, String tag,Bundle args) {
-        String tabId = ""+radioButtonId;
+
+    public void setCurrentTab(int checkedId) {
+        ((RadioButton) mRadioGroup.findViewById(checkedId)).setChecked(true);
+    }
+
+    public BaseFragment getCurrentTab() {
+        if (mLastTab != null) {
+            return mLastTab.fragment;
+        }
+        return null;
+    }
+
+    public void addTab(int radioButtonId, Class<?> clss, String tag, Bundle args) {
+        String tabId = "" + radioButtonId;
 
         TabInfo info = new TabInfo(tag, clss, args);
-        info.fragment = (BaseFragment)mFragmentManager.findFragmentByTag(tag);
+        info.fragment = (BaseFragment) mFragmentManager.findFragmentByTag(tag);
         if (info.fragment != null && !info.fragment.isDetached()) {
-            FragmentTransaction ft =mFragmentManager.beginTransaction();
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
             ft.detach(info.fragment);
             ft.commit();
         }
         mTabs.put(tabId, info);
     }
-	@Override
-	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		 TabInfo newTab = mTabs.get(""+checkedId);
-         if (mLastTab != newTab) {
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        TabInfo newTab = mTabs.get("" + checkedId);
+        if (mLastTab != newTab) {
             FragmentTransaction ft = mFragmentManager.beginTransaction();
             if (mLastTab != null) {
                 if (mLastTab.fragment != null) {
@@ -99,5 +106,5 @@ public class RadioTabManager implements OnCheckedChangeListener {
             ft.commit();
             mFragmentManager.executePendingTransactions();
         }
-	}
+    }
 }

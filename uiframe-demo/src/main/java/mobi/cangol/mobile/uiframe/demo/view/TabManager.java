@@ -17,12 +17,12 @@ import java.util.HashMap;
  * @Description:
  */
 public class TabManager implements TabHost.OnTabChangeListener {
-    private  TabHost mTabHost;
-    private  int mContainerId;
-    private  HashMap<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
+    private TabHost mTabHost;
+    private int mContainerId;
+    private HashMap<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
     private TabInfo mLastTab;
-    private  FragmentManager mFragmentManager;
-    private  Context mContext;
+    private FragmentManager mFragmentManager;
+    private Context mContext;
 
     public static final class TabInfo {
         private final String tag;
@@ -71,8 +71,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
         mFragmentManager = null;
         mTabs.clear();
         mTabHost.clearAllTabs();
-        mLastTab=null;
-        mContext=null;
+        mLastTab = null;
+        mContext = null;
     }
 
     public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {

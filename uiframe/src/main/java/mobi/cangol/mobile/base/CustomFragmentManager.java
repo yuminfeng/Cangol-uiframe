@@ -50,10 +50,10 @@ public class CustomFragmentManager {
                         }
                     }
                 }
-            }catch (OutOfMemoryError error){
+            } catch (OutOfMemoryError error) {
                 if (!fActivity.isFinishing())
                     fActivity.finish();
-            }catch (Exception e){
+            } catch (Exception e) {
                 if (!fActivity.isFinishing())
                     fActivity.finish();
             }
@@ -82,11 +82,11 @@ public class CustomFragmentManager {
     public void destroy() {
         this.stack.clear();
         this.handler.removeCallbacks(execPendingTransactions);
-        this.fActivity=null;
-        this.fragmentManager=null;
+        this.fActivity = null;
+        this.fragmentManager = null;
     }
 
-    protected static final  class InternalHandler extends Handler {
+    protected static final class InternalHandler extends Handler {
         public InternalHandler(FragmentActivity activity) {
             super(Looper.getMainLooper());
         }
@@ -119,7 +119,7 @@ public class CustomFragmentManager {
 
     public void restoreState(Bundle state) {
         String[] stackTags = state.getStringArray(STATE_TAG);
-        if(stackTags!=null){
+        if (stackTags != null) {
             for (String tag : stackTags) {
                 BaseFragment f = (BaseFragment) fragmentManager.findFragmentByTag(tag);
                 stack.addFragment(f);
@@ -143,7 +143,7 @@ public class CustomFragmentManager {
     }
 
     public void replace(Class<? extends BaseFragment> clazz, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
-        Log.v(STATE_TAG, "replace clazz="+clazz+",tag="+tag+",args="+args);
+        Log.v(STATE_TAG, "replace clazz=" + clazz + ",tag=" + tag + ",args=" + args);
         if (fragmentManager.isDestroyed() || isStateSaved()) return;
         if (clazz.isAssignableFrom(BaseDialogFragment.class))
             throw new IllegalStateException("DialogFragment can not be attached to a container view");
@@ -156,23 +156,23 @@ public class CustomFragmentManager {
                 while (stack.size() > 0) {
                     BaseFragment temp;
                     synchronized (lock) {
-                        temp=stack.popFragment();
+                        temp = stack.popFragment();
                         stack.popTag();
                     }
-                    Log.v(STATE_TAG, "FragmentStackSize="+stack.size()+" backStackEntryCount="+fragmentManager.getBackStackEntryCount());
-                    if(stack.size() > 0||!temp.isCleanStack())
+                    Log.v(STATE_TAG, "FragmentStackSize=" + stack.size() + " backStackEntryCount=" + fragmentManager.getBackStackEntryCount());
+                    if (stack.size() > 0 || !temp.isCleanStack())
                         fragmentManager.popBackStack();
-                    else{
+                    else {
                         BaseFragment top = temp;
-                        Log.v(STATE_TAG, "detach="+top);
-                        if(top!=null)beginTransaction().detach(top);
+                        Log.v(STATE_TAG, "detach=" + top);
+                        if (top != null) beginTransaction().detach(top);
                     }
                 }
             } else {
                 Log.i(STATE_TAG, "fragment isCleanStack=false");
                 if (fragment.isSingleton() && stack.containsTag(tag)) {
                     Log.i(STATE_TAG, "fragment isSingleton=true,while pop all");
-                    while (stack.size() > 0&&!tag.equals(stack.peekTag())) {
+                    while (stack.size() > 0 && !tag.equals(stack.peekTag())) {
                         synchronized (lock) {
                             stack.popFragment();
                             stack.popTag();
@@ -191,7 +191,7 @@ public class CustomFragmentManager {
         } else {
             Log.i(STATE_TAG, "fragment is exist");
             if (fragment.isCleanStack()) {
-                Log.i(STATE_TAG, "stack size="+stack.size());
+                Log.i(STATE_TAG, "stack size=" + stack.size());
                 if (stack.size() == 1) {
                     if (stack.peekTag().equals(tag)) {
                         fragment.onNewBundle(args);
@@ -199,11 +199,12 @@ public class CustomFragmentManager {
                     } else {
                         BaseFragment temp;
                         synchronized (lock) {
-                            temp=stack.popFragment();
+                            temp = stack.popFragment();
                             stack.popTag();
                         }
-                        BaseFragment top = temp;Log.v(STATE_TAG, "detach="+top);
-                        if(top!=null)beginTransaction().detach(top);
+                        BaseFragment top = temp;
+                        Log.v(STATE_TAG, "detach=" + top);
+                        if (top != null) beginTransaction().detach(top);
                         fragment.onNewBundle(args);
                     }
                 } else {
@@ -211,19 +212,19 @@ public class CustomFragmentManager {
                     while (stack.size() > 0) {
                         BaseFragment temp;
                         synchronized (lock) {
-                            temp=stack.popFragment();
+                            temp = stack.popFragment();
                             stack.popTag();
                         }
-                        Log.v(STATE_TAG, "FragmentStackSize="+stack.size()+" backStackEntryCount="+fragmentManager.getBackStackEntryCount());
-                        if(stack.size() > 0&&!temp.isCleanStack())
+                        Log.v(STATE_TAG, "FragmentStackSize=" + stack.size() + " backStackEntryCount=" + fragmentManager.getBackStackEntryCount());
+                        if (stack.size() > 0 && !temp.isCleanStack())
                             fragmentManager.popBackStack();
-                        else{
+                        else {
                             BaseFragment top = temp;
-                            Log.v(STATE_TAG, "detach="+top);
-                            if(top!=null)beginTransaction().detach(top);
+                            Log.v(STATE_TAG, "detach=" + top);
+                            if (top != null) beginTransaction().detach(top);
                             fragment.onNewBundle(args);
-                            if (top!=null&& TextUtils.equals(top.getClass().getName(),tag)) {
-                                Log.v(STATE_TAG, "isCleanStack=true,same tag,new instance"+tag);
+                            if (top != null && TextUtils.equals(top.getClass().getName(), tag)) {
+                                Log.v(STATE_TAG, "isCleanStack=true,same tag,new instance" + tag);
                                 fragment = (BaseFragment) Fragment.instantiate(fActivity, clazz.getName(), args);
                             }
                         }
@@ -235,7 +236,7 @@ public class CustomFragmentManager {
                     Log.i(STATE_TAG, "fragment isSingleton=false,newInstance");
                 } else {
                     Log.i(STATE_TAG, "fragment isSingleton=true,while pop all");
-                    while (stack.size() > 0&&!tag.equals(stack.peekTag())) {
+                    while (stack.size() > 0 && !tag.equals(stack.peekTag())) {
                         synchronized (lock) {
                             stack.popFragment();
                             stack.popTag();
@@ -326,7 +327,7 @@ public class CustomFragmentManager {
 
     public boolean popBackStack(boolean cleanFirst) {
         if (fragmentManager.isDestroyed() || isStateSaved()) return false;
-        if (cleanFirst||stack.size() > 1) {
+        if (cleanFirst || stack.size() > 1) {
             fragmentManager.popBackStack();
             synchronized (lock) {
                 BaseFragment baseFragment = stack.popFragment();
@@ -339,6 +340,7 @@ public class CustomFragmentManager {
         }
         return false;
     }
+
     public boolean popBackStack(String tag, int flag) {
         if (fragmentManager.isDestroyed() || isStateSaved()) return false;
         if (stack.size() > 1) {

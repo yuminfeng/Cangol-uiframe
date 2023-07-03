@@ -17,7 +17,7 @@ public class MenuFragment extends BaseMenuFragment {
     public TextView textView1;
     public TextView textView2;
 
-    private boolean isBottom=true;
+    private boolean isBottom = true;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

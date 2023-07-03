@@ -58,26 +58,27 @@ public abstract class BaseFragment extends Fragment {
     protected HandlerThread handlerThread;
     private Handler threadHandler;
     private Handler uiHandler;
+
     /**
      * 查找view
      *
      * @param view
      */
-    protected abstract  void findViews(View view);
+    protected abstract void findViews(View view);
 
     /**
      * 初始化view
      *
      * @param savedInstanceState
      */
-    protected abstract  void initViews(Bundle savedInstanceState);
+    protected abstract void initViews(Bundle savedInstanceState);
 
     /**
      * 初始化数据
      *
      * @param savedInstanceState
      */
-    protected abstract  void initData(Bundle savedInstanceState);
+    protected abstract void initData(Bundle savedInstanceState);
 
 
     public void onNewBundle(Bundle bundle) {
@@ -89,7 +90,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return
      */
-    protected FragmentInfo getNavigtionUpToFragment(){
+    protected FragmentInfo getNavigtionUpToFragment() {
         return null;
     }
 
@@ -108,7 +109,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return
      */
-    public final  CustomFragmentManager getCustomFragmentManager() {
+    public final CustomFragmentManager getCustomFragmentManager() {
         return stack;
     }
 
@@ -179,11 +180,11 @@ public abstract class BaseFragment extends Fragment {
         Log.v(TAG, "onCreate");
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        threadHandler = new InternalHandler(this,handlerThread.getLooper());
-        uiHandler= new InternalHandler(this,Looper.getMainLooper());
+        threadHandler = new InternalHandler(this, handlerThread.getLooper());
+        uiHandler = new InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getActivity().getApplication();
-        if (savedInstanceState != null&&null != stack) {
-           stack.restoreState(savedInstanceState);
+        if (savedInstanceState != null && null != stack) {
+            stack.restoreState(savedInstanceState);
         }
     }
 
@@ -245,13 +246,13 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         handlerThread.quit();
-        if (null != stack)stack.destroy();
+        if (null != stack) stack.destroy();
         super.onDestroy();
         Log.v(TAG, "onDestroy");
     }
 
     public void onDrawerSlide(float slideOffset) {
-        Log.v(TAG, "onDrawerSlide "+slideOffset);
+        Log.v(TAG, "onDrawerSlide " + slideOffset);
     }
 
     public void onDrawerOpened() {
@@ -308,7 +309,7 @@ public abstract class BaseFragment extends Fragment {
      * @param data
      */
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
-        Log.v(TAG, "onFragmentResult requestCode="+requestCode+",resultCode="+resultCode+",data="+data);
+        Log.v(TAG, "onFragmentResult requestCode=" + requestCode + ",resultCode=" + resultCode + ",data=" + data);
     }
 
     /**
@@ -316,7 +317,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @param resultCode
      */
-    public final  void setResult(int resultCode) {
+    public final void setResult(int resultCode) {
         this.setResult(resultCode, null);
     }
 
@@ -326,7 +327,7 @@ public abstract class BaseFragment extends Fragment {
      * @param resultCode
      * @param resultData
      */
-    public final  void setResult(int resultCode, Bundle resultData) {
+    public final void setResult(int resultCode, Bundle resultData) {
         this.resultCode = resultCode;
         this.resultData = resultData;
     }
@@ -334,7 +335,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 通知返回回调
      */
-    public final  void notifyResult() {
+    public final void notifyResult() {
         BaseFragment target = (BaseFragment) getTargetFragment();
         if (target != null) {
             target.onFragmentResult(getTargetRequestCode(), resultCode, resultData);
@@ -362,7 +363,7 @@ public abstract class BaseFragment extends Fragment {
     public boolean onBackPressed() {
 
         if (null == stack) return false;
-        if (stack.size() <= 1||stack.peek()==null) {
+        if (stack.size() <= 1 || stack.peek() == null) {
             return false;
         } else {
             if (stack.peek().onBackPressed()) {
@@ -380,8 +381,8 @@ public abstract class BaseFragment extends Fragment {
      * @param id
      * @return
      */
-    public final  <T extends View> T findViewById(@IdRes int id) {
-        if(getView()==null)
+    public final <T extends View> T findViewById(@IdRes int id) {
+        if (getView() == null)
             return null;
         else
             return this.getView().findViewById(id);
@@ -393,7 +394,7 @@ public abstract class BaseFragment extends Fragment {
      * @param resId
      */
     public void showToast(int resId) {
-        if (getActivity()!=null) {
+        if (getActivity() != null) {
             CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
             bfActivity.showToast(resId);
         } else {
@@ -408,7 +409,7 @@ public abstract class BaseFragment extends Fragment {
      * @param duration
      */
     public void showToast(int resId, int duration) {
-        if (getActivity()!=null) {
+        if (getActivity() != null) {
             CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
             bfActivity.showToast(resId, duration);
         } else {
@@ -422,7 +423,7 @@ public abstract class BaseFragment extends Fragment {
      * @param str
      */
     public void showToast(String str) {
-        if (getActivity()!=null) {
+        if (getActivity() != null) {
             CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
             bfActivity.showToast(str);
         } else {
@@ -437,9 +438,9 @@ public abstract class BaseFragment extends Fragment {
      * @param duration
      */
     public void showToast(String str, int duration) {
-        if (getActivity()!=null) {
+        if (getActivity() != null) {
             CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
-            bfActivity.showToast(str,duration);
+            bfActivity.showToast(str, duration);
         } else {
             Log.e(ILLEGAL_STATE_EXCEPTION_FRAGMENT_IS_ENABLE_FALSE);
         }
@@ -451,7 +452,7 @@ public abstract class BaseFragment extends Fragment {
      * @return
      */
     public boolean isEnable() {
-        return  !(null == getActivity() || !isAdded() || isRemoving() || isDetached());
+        return !(null == getActivity() || !isAdded() || isRemoving() || isDetached());
     }
 
     public void showSoftInput(EditText editText) {
@@ -480,6 +481,7 @@ public abstract class BaseFragment extends Fragment {
             Log.e(ILLEGAL_STATE_EXCEPTION_FRAGMENT_IS_ENABLE_FALSE);
         }
     }
+
     /**
      * 获取相应时间
      *
@@ -504,7 +506,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @param fragmentClass
      */
-    public final  void replaceFragment(Class<? extends BaseFragment> fragmentClass) {
+    public final void replaceFragment(Class<? extends BaseFragment> fragmentClass) {
         replaceFragment(fragmentClass, fragmentClass.getName(), null);
     }
 
@@ -514,7 +516,7 @@ public abstract class BaseFragment extends Fragment {
      * @param fragmentClass
      * @param args
      */
-    public final  void replaceFragment(Class<? extends BaseFragment> fragmentClass, Bundle args) {
+    public final void replaceFragment(Class<? extends BaseFragment> fragmentClass, Bundle args) {
         replaceFragment(fragmentClass, fragmentClass.getName(), args);
     }
 
@@ -525,7 +527,7 @@ public abstract class BaseFragment extends Fragment {
      * @param tag
      * @param args
      */
-    public final  void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
+    public final void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
         this.replaceFragment(fragmentClass, tag, args, null);
     }
 
@@ -537,24 +539,26 @@ public abstract class BaseFragment extends Fragment {
      * @param args
      * @param args
      */
-    public final  void replaceFragmentForResult(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int requestCode) {
+    public final void replaceFragmentForResult(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int requestCode) {
         if (requestCode != -1) {
             this.replaceFragment(fragmentClass, tag, args, new CustomFragmentTransaction().setTargetFragment(this, requestCode));
         } else {
             throw new IllegalStateException(REQUEST_CODE_1);
         }
     }
-    public final  void replaceFragmentForResult(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int requestCode,CustomFragmentTransaction customFragmentTransaction) {
+
+    public final void replaceFragmentForResult(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int requestCode, CustomFragmentTransaction customFragmentTransaction) {
         if (requestCode != -1) {
-            if(customFragmentTransaction!=null){
+            if (customFragmentTransaction != null) {
                 this.replaceFragment(fragmentClass, tag, args, customFragmentTransaction.setTargetFragment(this, requestCode));
-            }else{
+            } else {
                 this.replaceFragment(fragmentClass, tag, args, new CustomFragmentTransaction().setTargetFragment(this, requestCode));
             }
         } else {
             throw new IllegalStateException(REQUEST_CODE_1);
         }
     }
+
     /**
      * 替换同级fragment 带自定义动画
      *
@@ -563,7 +567,7 @@ public abstract class BaseFragment extends Fragment {
      * @param args
      * @param customFragmentTransaction
      */
-    public final  void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
+    public final void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         CustomFragmentManager fragmentManager;
         if (parent != null) {
@@ -619,7 +623,7 @@ public abstract class BaseFragment extends Fragment {
      * @param tag
      * @param args
      */
-    public final  void replaceParentFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
+    public final void replaceParentFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
         replaceParentFragment(fragmentClass, tag, args, null);
     }
 
@@ -631,7 +635,7 @@ public abstract class BaseFragment extends Fragment {
      * @param args
      * @param requestCode
      */
-    public final  void replaceParentFragmentForResult(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int requestCode) {
+    public final void replaceParentFragmentForResult(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int requestCode) {
         if (requestCode != -1) {
             this.replaceParentFragment(fragmentClass, tag, args, new CustomFragmentTransaction().setTargetFragment(this, requestCode));
         } else {
@@ -647,7 +651,7 @@ public abstract class BaseFragment extends Fragment {
      * @param args
      * @param customFragmentTransaction
      */
-    public final  void replaceParentFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
+    public final void replaceParentFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         if (parent != null) {
             parent.replaceFragment(fragmentClass, tag, args, customFragmentTransaction);
@@ -663,7 +667,7 @@ public abstract class BaseFragment extends Fragment {
      * @param tag
      * @param args
      */
-    public final  void replaceChildFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
+    public final void replaceChildFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
         replaceChildFragment(fragmentClass, tag, args, null);
     }
 
@@ -675,7 +679,7 @@ public abstract class BaseFragment extends Fragment {
      * @param args
      * @param customFragmentTransaction
      */
-    public final  void replaceChildFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
+    public final void replaceChildFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, CustomFragmentTransaction customFragmentTransaction) {
         if (stack != null) {
             if (!stack.isStateSaved()) {
                 stack.replace(fragmentClass, tag, args, customFragmentTransaction);
@@ -688,36 +692,38 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public final  void popBackStack(String tag,int flag) {
+    public final void popBackStack(String tag, int flag) {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         if (parent != null) {
-            parent.getCustomFragmentManager().popBackStack(tag,flag);
+            parent.getCustomFragmentManager().popBackStack(tag, flag);
         } else {
             if (getActivity() == null) {
                 throw new IllegalStateException("getActivity is null");
             } else {
                 CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
-                bfActivity.getCustomFragmentManager().popBackStack(tag,flag);
+                bfActivity.getCustomFragmentManager().popBackStack(tag, flag);
             }
         }
     }
-    public final  void popBackStackImmediate(String tag,int flag) {
+
+    public final void popBackStackImmediate(String tag, int flag) {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         if (parent != null) {
-            parent.getCustomFragmentManager().popBackStackImmediate(tag,flag);
+            parent.getCustomFragmentManager().popBackStackImmediate(tag, flag);
         } else {
             if (getActivity() == null) {
                 throw new IllegalStateException("getActivity is null");
             } else {
                 CustomFragmentActivityDelegate bfActivity = (CustomFragmentActivityDelegate) this.getActivity();
-                bfActivity.getCustomFragmentManager().popBackStackImmediate(tag,flag);
+                bfActivity.getCustomFragmentManager().popBackStackImmediate(tag, flag);
             }
         }
     }
+
     /**
      * 立即将tag的fragment弹出栈
      */
-    public final  void popBackStack() {
+    public final void popBackStack() {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         if (parent != null) {
             parent.getCustomFragmentManager().popBackStack();
@@ -730,10 +736,11 @@ public abstract class BaseFragment extends Fragment {
             }
         }
     }
+
     /**
      * 立即将当前fragment弹出栈
      */
-    public final  void popBackStackImmediate() {
+    public final void popBackStackImmediate() {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         if (parent != null) {
             parent.getCustomFragmentManager().popBackStackImmediate();
@@ -746,10 +753,11 @@ public abstract class BaseFragment extends Fragment {
             }
         }
     }
+
     /**
      * 将所有fragment弹出栈
      */
-    public final  void popBackStackAll() {
+    public final void popBackStackAll() {
         BaseFragment parent = (BaseFragment) this.getParentFragment();
         if (parent != null) {
             parent.getCustomFragmentManager().popBackStackAll();
@@ -766,6 +774,7 @@ public abstract class BaseFragment extends Fragment {
     protected Handler getUiHandler() {
         return uiHandler;
     }
+
     protected Handler getThreadHandler() {
         return threadHandler;
     }
@@ -785,17 +794,17 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             return false;
-        }else {
+        } else {
             return stack.peek().onKeyUp(keyCode, event);
         }
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             return false;
-        }else {
+        } else {
             return stack.peek().onKeyDown(keyCode, event);
         }
     }
@@ -807,7 +816,7 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    protected static final  class InternalHandler extends Handler {
+    protected static final class InternalHandler extends Handler {
         private final WeakReference<BaseFragment> mFragmentRef;
 
         public InternalHandler(BaseFragment fragment, Looper looper) {
@@ -824,10 +833,10 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @ColorInt
-    public  int getThemeAttrColor(@AttrRes int colorAttr) {
-        if(getActivity()==null){
+    public int getThemeAttrColor(@AttrRes int colorAttr) {
+        if (getActivity() == null) {
             throw new IllegalStateException("getActivity is null");
-        }else{
+        } else {
             TypedArray array = getActivity().obtainStyledAttributes(null, new int[]{colorAttr});
             try {
                 return array.getColor(0, 0);
@@ -837,10 +846,10 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public TypedValue getAttrTypedValue(@AttrRes int attr){
-        if(getActivity()==null){
+    public TypedValue getAttrTypedValue(@AttrRes int attr) {
+        if (getActivity() == null) {
             throw new IllegalStateException("getActivity is null");
-        }else{
+        } else {
             TypedValue typedValue = new TypedValue();
             getActivity().getTheme().resolveAttribute(attr, typedValue, true);
             return typedValue;

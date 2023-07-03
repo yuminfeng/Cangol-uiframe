@@ -13,58 +13,62 @@ import mobi.cangol.mobile.uiframe.demo.fragment.MenuFragment;
 
 @SuppressLint("ResourceAsColor")
 public class TabDrawerActivity extends TabDrawerNavigationFragmentActivity {
-	private static long back_pressed;
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		this.setStatusBarTintColor(Color.DKGRAY);
-		this.setNavigationBarTintColor(Color.DKGRAY);
-		this.getCustomActionBar().setBackgroundColor(Color.DKGRAY);
-		this.setFloatActionBarEnabled(true);
-		if (savedInstanceState == null) {
-			Bundle bundle=new Bundle();
-			bundle.putBoolean("isBottom",true);
-			this.setMenuFragment(MenuFragment.class,bundle);
-			this.setContentFragment(HomeFragment.class, "TestFragment", null, MenuFragment.MODULE_HOME);
-		}
-		findViews();
-		initViews(savedInstanceState);
-		initData(savedInstanceState);
-		//this.setDrawerEnable(Gravity.RIGHT,true);
-	}
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Log.v("onStart " + getDrawer(Gravity.RIGHT));
+    private static long back_pressed;
 
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        this.setStatusBarTintColor(Color.DKGRAY);
+        this.setNavigationBarTintColor(Color.DKGRAY);
+        this.getCustomActionBar().setBackgroundColor(Color.DKGRAY);
+        this.setFloatActionBarEnabled(true);
+        if (savedInstanceState == null) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isBottom", true);
+            this.setMenuFragment(MenuFragment.class, bundle);
+            this.setContentFragment(HomeFragment.class, "TestFragment", null, MenuFragment.MODULE_HOME);
+        }
+        findViews();
+        initViews(savedInstanceState);
+        initData(savedInstanceState);
+        //this.setDrawerEnable(Gravity.RIGHT,true);
+    }
 
-	@Override
-	public void findViews() {
-	}
-	@Override
-	public void initViews(Bundle savedInstanceState) {
-		
-	}
-	@Override
-	public void initData(Bundle savedInstanceState) {
-		
-	}
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v("onStart " + getDrawer(Gravity.RIGHT));
 
-	@Override
-	public void onBack() {
-		if(back_pressed+2000>System.currentTimeMillis()){
-			super.onBack();
-			app.onExit();
-		}else{
-			back_pressed=System.currentTimeMillis();
+    }
+
+    @Override
+    public void findViews() {
+    }
+
+    @Override
+    public void initViews(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void initData(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onBack() {
+        if (back_pressed + 2000 > System.currentTimeMillis()) {
+            super.onBack();
+            app.onExit();
+        } else {
+            back_pressed = System.currentTimeMillis();
             showToast("Please on back");
-		}
-	}
+        }
+    }
 
-	public int getContentFrameId() {
-		return R.id.frame_main;
-	}
+    public int getContentFrameId() {
+        return R.id.frame_main;
+    }
 
 }

@@ -33,7 +33,7 @@ import android.widget.FrameLayout;
 import mobi.cangol.mobile.uiframe.R;
 
 public class SlidingMenuLayout extends PagerEnabledSlidingPaneLayout {
-    private static final String TAG="SlidingMenuLayout";
+    private static final String TAG = "SlidingMenuLayout";
     private FrameLayout mContentView;
     private FrameLayout mMenuView;
     private float mMenuWidth = 0.75f;
@@ -104,6 +104,7 @@ public class SlidingMenuLayout extends PagerEnabledSlidingPaneLayout {
         mMenuEnable = enable;
 
     }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (mMenuEnable) {
@@ -128,33 +129,35 @@ public class SlidingMenuLayout extends PagerEnabledSlidingPaneLayout {
         }
         return true;
     }
-    private void fitDecorChild(View view){
-        ViewGroup contentView= (ViewGroup) view.findViewById(R.id.actionbar_content_view);
-        if(contentView!=null){
-            ViewGroup decorChild= (ViewGroup)contentView.getChildAt(0);
-            if(decorChild != null){
-                    WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-                    FrameLayout.LayoutParams layoutParams=(FrameLayout.LayoutParams)decorChild.getLayoutParams();
-                    switch (manager.getDefaultDisplay().getRotation()) {
-                        case Surface.ROTATION_90:
-                            layoutParams.rightMargin=0;
-                            break;
-                        case Surface.ROTATION_180:
-                            layoutParams.topMargin=0;
-                            break;
-                        case Surface.ROTATION_270:
-                            layoutParams.leftMargin=0;
-                            break;
-                        default:
-                            layoutParams.bottomMargin=0;
-                            break;
-                    }
-                    decorChild.setLayoutParams(layoutParams);
+
+    private void fitDecorChild(View view) {
+        ViewGroup contentView = (ViewGroup) view.findViewById(R.id.actionbar_content_view);
+        if (contentView != null) {
+            ViewGroup decorChild = (ViewGroup) contentView.getChildAt(0);
+            if (decorChild != null) {
+                WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) decorChild.getLayoutParams();
+                switch (manager.getDefaultDisplay().getRotation()) {
+                    case Surface.ROTATION_90:
+                        layoutParams.rightMargin = 0;
+                        break;
+                    case Surface.ROTATION_180:
+                        layoutParams.topMargin = 0;
+                        break;
+                    case Surface.ROTATION_270:
+                        layoutParams.leftMargin = 0;
+                        break;
+                    default:
+                        layoutParams.bottomMargin = 0;
+                        break;
+                }
+                decorChild.setLayoutParams(layoutParams);
             }
         }
     }
+
     private void fitPadding(Rect rect) {
-        boolean hasNavigationBar=checkDeviceHasNavigationBar();
+        boolean hasNavigationBar = checkDeviceHasNavigationBar();
         if (hasNavigationBar) {
             WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             switch (manager.getDefaultDisplay().getRotation()) {
@@ -174,11 +177,13 @@ public class SlidingMenuLayout extends PagerEnabledSlidingPaneLayout {
         mContentView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
         mMenuView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
     }
+
     /**
      * 检测是否具有底部导航栏
+     *
      * @return
      */
-    private  boolean checkDeviceHasNavigationBar() {
+    private boolean checkDeviceHasNavigationBar() {
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics realDisplayMetrics = new DisplayMetrics();
@@ -191,12 +196,15 @@ public class SlidingMenuLayout extends PagerEnabledSlidingPaneLayout {
         int displayWidth = displayMetrics.widthPixels;
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
+
     private int getNavBarWidth() {
         return getNavBarDimen("navigation_bar_width");
     }
+
     private int getNavBarHeight() {
         return getNavBarDimen("navigation_bar_height");
     }
+
     private int getNavBarDimen(String resourceString) {
         Resources r = getResources();
         int id = r.getIdentifier(resourceString, "dimen", "android");
@@ -206,6 +214,7 @@ public class SlidingMenuLayout extends PagerEnabledSlidingPaneLayout {
             return 0;
         }
     }
+
     public void attachToActivity(Activity activity, boolean isFloatActionBarEnabled) {
         this.isFloatActionBarEnabled = isFloatActionBarEnabled;
 

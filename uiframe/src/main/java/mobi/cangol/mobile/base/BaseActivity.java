@@ -50,6 +50,7 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
     private HandlerThread handlerThread;
     private Handler threadHandler;
     private Handler uiHandler;
+
     public float getIdleTime() {
         return (System.currentTimeMillis() - startTime) / 1000.0f;
     }
@@ -63,26 +64,32 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
         startTime = System.currentTimeMillis();
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        threadHandler = new InternalHandler(this,handlerThread.getLooper());
-        uiHandler= new InternalHandler(this,Looper.getMainLooper());
+        threadHandler = new InternalHandler(this, handlerThread.getLooper());
+        uiHandler = new InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
     }
+
     @Override
     public void showToast(int resId) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
+        if (!isFinishing())
+            Toast.makeText(this.getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void showToast(String str) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+        if (!isFinishing())
+            Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void showToast(int resId, int duration) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), resId, duration).show();
+        if (!isFinishing()) Toast.makeText(this.getApplicationContext(), resId, duration).show();
     }
+
     @Override
     public void showToast(String str, int duration) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), str, duration).show();
+        if (!isFinishing()) Toast.makeText(this.getApplicationContext(), str, duration).show();
     }
 
     @Override
@@ -170,6 +177,7 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
             this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
+
     @Override
     public void showSoftInput(EditText editText) {
         editText.requestFocus();
@@ -177,6 +185,7 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
         imm.showSoftInput(editText, 0);
         editText.setText(null);
     }
+
     @Override
     public void hideSoftInput() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -184,11 +193,13 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
             imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
     @Override
     public void hideSoftInput(EditText editText) {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
     /**
      * 处理back事件
      */
@@ -210,23 +221,25 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
 
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler!= null && runnable != null)
+        if (threadHandler != null && runnable != null)
             threadHandler.post(runnable);
     }
 
     protected void handleMessage(Message msg) {
         // do somethings
     }
-    protected  static class StaticInnerRunnable implements Runnable{
+
+    protected static class StaticInnerRunnable implements Runnable {
         @Override
         public void run() {
             // do somethings
         }
     }
+
     static final class InternalHandler extends Handler {
         private final WeakReference<Context> mContext;
 
-        public InternalHandler(Context context,Looper looper) {
+        public InternalHandler(Context context, Looper looper) {
             super(looper);
             mContext = new WeakReference<>(context);
         }
@@ -234,12 +247,13 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
         public void handleMessage(Message msg) {
             Context context = mContext.get();
             if (context != null) {
-               ((BaseActivity)context).handleMessage(msg);
+                ((BaseActivity) context).handleMessage(msg);
             }
         }
     }
+
     @ColorInt
-    public  int getThemeAttrColor(@AttrRes int colorAttr) {
+    public int getThemeAttrColor(@AttrRes int colorAttr) {
         TypedArray array = this.obtainStyledAttributes(null, new int[]{colorAttr});
         try {
             return array.getColor(0, 0);

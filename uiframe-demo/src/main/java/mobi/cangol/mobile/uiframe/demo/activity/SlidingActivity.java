@@ -14,67 +14,70 @@ import mobi.cangol.mobile.uiframe.demo.fragment.MenuFragment;
 
 @SuppressLint("ResourceAsColor")
 public class SlidingActivity extends SlidingNavigationFragmentActivity {
-	private static long back_pressed;
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		this.setStatusBarTintColor(Color.DKGRAY);
-		this.setNavigationBarTintColor(Color.DKGRAY);
-		this.getCustomActionBar().setBackgroundColor(Color.DKGRAY);
-		this.setFloatActionBarEnabled(false);
-		if (savedInstanceState == null) {
-			Bundle bundle=new Bundle();
-			bundle.putBoolean("isBottom",false);
-			this.setMenuFragment(MenuFragment.class,bundle);
-			this.setContentFragment(HomeFragment.class, "TestFragment", null, MenuFragment.MODULE_HOME);
-		}
-		findViews();
-		initViews(savedInstanceState);
-		initData(savedInstanceState);
-		this.setFloatActionBarEnabled(true);
+    private static long back_pressed;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        this.setStatusBarTintColor(Color.DKGRAY);
+        this.setNavigationBarTintColor(Color.DKGRAY);
+        this.getCustomActionBar().setBackgroundColor(Color.DKGRAY);
+        this.setFloatActionBarEnabled(false);
+        if (savedInstanceState == null) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isBottom", false);
+            this.setMenuFragment(MenuFragment.class, bundle);
+            this.setContentFragment(HomeFragment.class, "TestFragment", null, MenuFragment.MODULE_HOME);
+        }
+        findViews();
+        initViews(savedInstanceState);
+        initData(savedInstanceState);
+        this.setFloatActionBarEnabled(true);
         //this.initFragmentStack(R.id.content_frame);
         //if(savedInstanceState==null)this.replaceFragment(TestFragment.class, "Home", null);
-		LeakSingleton.getInstance().setOnTestListener(new LeakSingleton.OnTestListener() {
-			@Override
-			public void onTest() {
-				setContentFragment(ItemFragment.class, "ItemFragment", new Bundle(), MenuFragment.MODULE_CLEAN);
-			}
-		});
-	}
+        LeakSingleton.getInstance().setOnTestListener(new LeakSingleton.OnTestListener() {
+            @Override
+            public void onTest() {
+                setContentFragment(ItemFragment.class, "ItemFragment", new Bundle(), MenuFragment.MODULE_CLEAN);
+            }
+        });
+    }
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Log.v("onStart " + System.currentTimeMillis());
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v("onStart " + System.currentTimeMillis());
 
-	}
+    }
 
-	@Override
-	public void findViews() {
-	}
-	@Override
-	public void initViews(Bundle savedInstanceState) {
-		
-	}
-	@Override
-	public void initData(Bundle savedInstanceState) {
-		
-	}
+    @Override
+    public void findViews() {
+    }
 
-	@Override
-	public void onBack() {
-		if(back_pressed+2000>System.currentTimeMillis()){
-			super.onBack();
-			app.onExit();
-		}else{
-			back_pressed=System.currentTimeMillis();
+    @Override
+    public void initViews(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void initData(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onBack() {
+        if (back_pressed + 2000 > System.currentTimeMillis()) {
+            super.onBack();
+            app.onExit();
+        } else {
+            back_pressed = System.currentTimeMillis();
             showToast("Please on back");
-		}
-	}
+        }
+    }
 
-	public int getContentFrameId() {
-		return R.id.frame_main;
-	}
+    public int getContentFrameId() {
+        return R.id.frame_main;
+    }
 
 }
