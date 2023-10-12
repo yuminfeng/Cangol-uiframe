@@ -1,7 +1,8 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    //只在编译时有效，不会参与打包
+    compileOnly fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.slidingpanelayout:slidingpanelayout:1.2.0'
