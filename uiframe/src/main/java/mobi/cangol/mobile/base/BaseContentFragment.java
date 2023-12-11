@@ -15,6 +15,8 @@
  */
 package mobi.cangol.mobile.base;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -31,6 +33,8 @@ public abstract class BaseContentFragment extends BaseFragment {
 
     public static final String GET_ACTIVITY_IS_NULL = "get activity is null";
     public static final String GET_ACTIVITY_IS_NOT = "get activity is not ActionBarActivity";
+    public static final String DYNAMIC_FRAGMENT_CLASS = "class";
+    public static final String DYNAMIC_FRAGMENT_ARGS = "args";
     private CharSequence title;
 
     /**
@@ -330,6 +334,24 @@ public abstract class BaseContentFragment extends BaseFragment {
             replaceFragment(fragmentClass, tag, args);
         }
         notifyMenuChange(moduleId);
+    }
+
+    /**
+     * 开启新页面，带参数回调，在MainActivity中onActivityResult接收处理
+     *
+     * @param fragmentClass
+     * @param args
+     * @param activityClass
+     * @param requestCode
+     */
+    public final void setContentFragment(Class<? extends BaseContentFragment> fragmentClass, Bundle args, Class<? extends Activity> activityClass, int requestCode) {
+        if (getActivity() == null) return;
+        Intent intent = new Intent(getActivity(), activityClass);
+        if (args == null)
+            args = new Bundle();
+        intent.putExtra(DYNAMIC_FRAGMENT_CLASS, fragmentClass.getName());
+        intent.putExtra(DYNAMIC_FRAGMENT_ARGS, args);
+        getActivity().startActivityForResult(intent, requestCode);
     }
 
     /**
