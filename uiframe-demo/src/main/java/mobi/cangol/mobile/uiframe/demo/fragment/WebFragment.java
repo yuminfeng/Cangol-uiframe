@@ -85,7 +85,7 @@ public class WebFragment extends BaseContentFragment {
          **/
 
         //应用缓存API可用
-        webSettings.setAppCacheEnabled(true);
+//        webSettings.setAppCacheEnabled(true);
         //DOM存储API可用
         webSettings.setDomStorageEnabled(true);
         webSettings.setTextSize(WebSettings.TextSize.NORMAL);

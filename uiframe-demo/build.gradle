@@ -18,7 +18,6 @@ dependencies {
 
 android {
     compileSdkVersion Integer.decode("$sdk_version")
-    buildToolsVersion "$build_version"
 
     defaultConfig {
         multiDexEnabled true
