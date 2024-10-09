@@ -1,17 +1,19 @@
 package mobi.cangol.mobile.uiframe.demo.view;
 
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
+
 import android.content.Context;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import java.util.ArrayList;
+import com.google.android.material.tabs.TabLayout;
 
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
+import java.util.ArrayList;
 
 /**
  * @author Cangol
@@ -36,6 +38,7 @@ public class TabLayoutPageManager extends FragmentStatePagerAdapter implements
         mTabLayout.addOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(this);
     }
+
     public void addTab(int tabId, TabLayout.Tab tab, Class<?> clazz, Bundle args) {
         String tag = "" + tabId;
         tab.setTag(tag);
@@ -51,12 +54,13 @@ public class TabLayoutPageManager extends FragmentStatePagerAdapter implements
         TabInfo info = mTabs.get(mViewPager.getCurrentItem());
         return mFragmentManager.findFragmentByTag(info.tag);
     }
+
     public void removeTab(int tabId) {
         String tag = "" + tabId;
-        if (!mTabs.contains(tag)){
+        if (!mTabs.contains(tag)) {
             //not found~!
             return;
-        }else{
+        } else {
             mTabs.remove(tag);
             mTabLayout.removeTabAt(tabId);
         }
@@ -87,7 +91,7 @@ public class TabLayoutPageManager extends FragmentStatePagerAdapter implements
     }
 
     public void onPageSelected(int position) {
-        mTabLayout.setScrollPosition(position,0,true);
+        mTabLayout.setScrollPosition(position, 0, true);
     }
 
     public void onPageScrollStateChanged(int state) {

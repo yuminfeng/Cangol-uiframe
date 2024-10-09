@@ -18,16 +18,9 @@ package mobi.cangol.mobile.navigation;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Rect;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-import androidx.drawerlayout.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Surface;
@@ -36,13 +29,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import java.lang.reflect.Method;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import mobi.cangol.mobile.uiframe.R;
 
 
 public class DrawerMenuLayout extends DrawerLayout {
-    private static final String TAG="DrawerMenuLayout";
+    private static final String TAG = "DrawerMenuLayout";
     private FrameLayout mContentView;
     private FrameLayout mMenuView;
     private FrameLayout mMaskView;
@@ -73,7 +66,6 @@ public class DrawerMenuLayout extends DrawerLayout {
         this.addView(mMenuView, lp2);
 
 
-
     }
 
     public int getMenuFrameId() {
@@ -96,12 +88,13 @@ public class DrawerMenuLayout extends DrawerLayout {
         mContentView.removeAllViews();
         mContentView.addView(v);
     }
+
     public FrameLayout getMaskView() {
         return mMaskView;
     }
 
     public void displayMaskView(boolean show) {
-        this.mMaskView.setVisibility(show?VISIBLE:GONE);
+        this.mMaskView.setVisibility(show ? VISIBLE : GONE);
     }
 
     public void showMenu(boolean show) {
@@ -129,34 +122,36 @@ public class DrawerMenuLayout extends DrawerLayout {
         }
         return true;
     }
-    private void fitDecorChild(View view){
-        ViewGroup contentView= view.findViewById(R.id.actionbar_content_view);
-        if(contentView!=null){
-            ViewGroup decorChild= (ViewGroup)contentView.getChildAt(0);
-            if(decorChild!=null&&Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                    WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-                    FrameLayout.LayoutParams layoutParams=(FrameLayout.LayoutParams)decorChild.getLayoutParams();
-                    switch (manager.getDefaultDisplay().getRotation()) {
-                        case Surface.ROTATION_90:
-                            layoutParams.rightMargin=0;
-                            break;
-                        case Surface.ROTATION_180:
-                            layoutParams.topMargin=0;
-                            break;
-                        case Surface.ROTATION_270:
-                            layoutParams.leftMargin=0;
-                            break;
-                        default:
-                            layoutParams.bottomMargin=0;
-                            break;
-                    }
-                    decorChild.setLayoutParams(layoutParams);
+
+    private void fitDecorChild(View view) {
+        ViewGroup contentView = view.findViewById(R.id.actionbar_content_view);
+        if (contentView != null) {
+            ViewGroup decorChild = (ViewGroup) contentView.getChildAt(0);
+            if (decorChild != null) {
+                WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) decorChild.getLayoutParams();
+                switch (manager.getDefaultDisplay().getRotation()) {
+                    case Surface.ROTATION_90:
+                        layoutParams.rightMargin = 0;
+                        break;
+                    case Surface.ROTATION_180:
+                        layoutParams.topMargin = 0;
+                        break;
+                    case Surface.ROTATION_270:
+                        layoutParams.leftMargin = 0;
+                        break;
+                    default:
+                        layoutParams.bottomMargin = 0;
+                        break;
                 }
+                decorChild.setLayoutParams(layoutParams);
+            }
         }
     }
+
     private void fitPadding(Rect rect) {
-        boolean hasNavigationBar=checkDeviceHasNavigationBar();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP&&hasNavigationBar) {
+        boolean hasNavigationBar = checkDeviceHasNavigationBar();
+        if (hasNavigationBar) {
             WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             switch (manager.getDefaultDisplay().getRotation()) {
                 case Surface.ROTATION_90:
@@ -177,51 +172,34 @@ public class DrawerMenuLayout extends DrawerLayout {
         mMenuView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
         mMaskView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
     }
+
     /**
      * 检测是否具有底部导航栏
+     *
      * @return
      */
-    private  boolean checkDeviceHasNavigationBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            Display display = windowManager.getDefaultDisplay();
-            DisplayMetrics realDisplayMetrics = new DisplayMetrics();
-            display.getRealMetrics(realDisplayMetrics);
-            int realHeight = realDisplayMetrics.heightPixels;
-            int realWidth = realDisplayMetrics.widthPixels;
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            display.getMetrics(displayMetrics);
-            int displayHeight = displayMetrics.heightPixels;
-            int displayWidth = displayMetrics.widthPixels;
-            return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
-        } else {
-            boolean hasNavigationBar = false;
-            Resources resources = getContext().getResources();
-            int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
-            if (id > 0) {
-                hasNavigationBar = resources.getBoolean(id);
-            }
-            try {
-                Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
-                Method m = systemPropertiesClass.getMethod("get", String.class);
-                String navBarOverride = (String) m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
-                if ("1".equals(navBarOverride)) {
-                    hasNavigationBar = false;
-                } else if ("0".equals(navBarOverride)) {
-                    hasNavigationBar = true;
-                }
-            } catch (Exception e) {
-                Log.e(TAG,"checkDeviceHasNavigationBar",e);
-            }
-            return hasNavigationBar;
-        }
+    private boolean checkDeviceHasNavigationBar() {
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        display.getRealMetrics(realDisplayMetrics);
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
+
     private int getNavBarWidth() {
         return getNavBarDimen("navigation_bar_width");
     }
+
     private int getNavBarHeight() {
         return getNavBarDimen("navigation_bar_height");
     }
+
     private int getNavBarDimen(String resourceString) {
         Resources r = getResources();
         int id = r.getIdentifier(resourceString, "dimen", "android");
@@ -231,6 +209,7 @@ public class DrawerMenuLayout extends DrawerLayout {
             return 0;
         }
     }
+
     @Override
     public void setBackgroundColor(int color) {
         super.setBackgroundColor(color);

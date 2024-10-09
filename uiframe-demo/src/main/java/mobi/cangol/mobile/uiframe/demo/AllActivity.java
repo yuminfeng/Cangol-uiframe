@@ -12,63 +12,64 @@ import mobi.cangol.mobile.uiframe.demo.activity.TabActivity;
 import mobi.cangol.mobile.uiframe.demo.activity.TabDrawerActivity;
 
 public class AllActivity extends BaseActionBarActivity {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_all);
-		findViews();
-		initViews(savedInstanceState);
-		initData(savedInstanceState);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_all);
+        findViews();
+        initViews(savedInstanceState);
+        initData(savedInstanceState);
+    }
 
-	@Override
-	public void findViews() {}
+    @Override
+    public void findViews() {
+    }
 
-	@Override
-	public void initViews(Bundle savedInstanceState) {
-		setTitle("ALL");
-		this.setStatusBarTintColor(Color.DKGRAY);
-		this.setNavigationBarTintColor(Color.DKGRAY);
-		this.getCustomActionBar().setBackgroundColor(Color.DKGRAY);
-		findViewById(R.id.button1).setOnClickListener(new View.OnClickListener(){
+    @Override
+    public void initViews(Bundle savedInstanceState) {
+        setTitle("ALL");
+        this.setStatusBarTintColor(Color.DKGRAY);
+        this.setNavigationBarTintColor(Color.DKGRAY);
+        this.getCustomActionBar().setBackgroundColor(Color.DKGRAY);
+        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(AllActivity.this, SlidingActivity.class));
-				finish();
-			}
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AllActivity.this, SlidingActivity.class));
+                finish();
+            }
 
-		});
-		findViewById(R.id.button2).setOnClickListener(new View.OnClickListener(){
+        });
+        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(AllActivity.this, DrawerActivity.class));
-				finish();
-			}
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AllActivity.this, DrawerActivity.class));
+                finish();
+            }
 
-		});
-		findViewById(R.id.button3).setOnClickListener(new View.OnClickListener(){
+        });
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(AllActivity.this, TabActivity.class));
-				finish();
-			}
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AllActivity.this, TabActivity.class));
+                finish();
+            }
 
-		});
-		findViewById(R.id.button4).setOnClickListener(new View.OnClickListener(){
+        });
+        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(AllActivity.this, TabDrawerActivity.class));
-				finish();
-			}
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AllActivity.this, TabDrawerActivity.class));
+                finish();
+            }
 
-		});
-	}
+        });
+    }
 
-	@Override
-	public void initData(Bundle savedInstanceState) {
-	}
+    @Override
+    public void initData(Bundle savedInstanceState) {
+    }
 }

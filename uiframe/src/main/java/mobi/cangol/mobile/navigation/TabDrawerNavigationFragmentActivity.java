@@ -2,15 +2,16 @@ package mobi.cangol.mobile.navigation;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.drawerlayout.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import mobi.cangol.mobile.base.BaseFragment;
 import mobi.cangol.mobile.base.BaseNavigationFragmentActivity;
@@ -152,6 +153,7 @@ class TabDrawerNavigationFragmentActivityDelegate extends AbstractNavigationFrag
     public void setDrawerEnable(int gravity, boolean enable) {
         mDrawerLayout.setDrawerEnable(gravity, enable);
     }
+
     public FrameLayout getMaskView() {
         return mDrawerLayout.getMaskView();
     }
@@ -159,6 +161,7 @@ class TabDrawerNavigationFragmentActivityDelegate extends AbstractNavigationFrag
     public void displayMaskView(boolean show) {
         mDrawerLayout.displayMaskView(show);
     }
+
     public void showDrawer(int gravity, boolean show) {
         mDrawerLayout.showDrawer(gravity, show);
     }
@@ -260,16 +263,16 @@ class TabDrawerNavigationFragmentActivityDelegate extends AbstractNavigationFrag
 
     public BaseFragment getDrawer(int gravity) {
         Fragment fragment = mActivity.getSupportFragmentManager().findFragmentById(gravity == Gravity.LEFT ? R.id.left_view : R.id.right_view);
-        if(fragment!=null){
+        if (fragment != null) {
             return (BaseFragment) fragment;
-        }else{
+        } else {
             return null;
         }
     }
 
     public void removeDrawer(int gravity) {
         Fragment fragment = mActivity.getSupportFragmentManager().findFragmentById(gravity == Gravity.LEFT ? R.id.left_view : R.id.right_view);
-        if(fragment!=null){
+        if (fragment != null) {
             FragmentTransaction t = mActivity.getSupportFragmentManager()
                     .beginTransaction();
             t.remove(fragment);

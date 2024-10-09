@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import mobi.cangol.mobile.base.BaseContentFragment;
-import mobi.cangol.mobile.base.FragmentInfo;
 import mobi.cangol.mobile.uiframe.demo.R;
 
 public class InputFragment extends BaseContentFragment {

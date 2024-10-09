@@ -23,31 +23,33 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorInt;
-import androidx.fragment.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.fragment.app.FragmentActivity;
+
 import java.lang.ref.WeakReference;
 
 import mobi.cangol.mobile.CoreApplication;
+import mobi.cangol.mobile.handler.IMsgHandler;
+import mobi.cangol.mobile.handler.ThreadHandlerProxy;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
-import mobi.cangol.mobile.service.session.Session;
 import mobi.cangol.mobile.service.session.SessionService;
 
-public abstract class BaseFragmentActivity extends FragmentActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate {
+public abstract class BaseFragmentActivity extends FragmentActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate, IMsgHandler {
     protected final String TAG = Log.makeLogTag(this.getClass());
     protected CoreApplication app;
     private CustomFragmentManager stack;
     private long startTime;
-    private HandlerThread handlerThread;
-    private Handler threadHandler;
+    private ThreadHandlerProxy threadHandlerProxy;
     private Handler uiHandler;
+
     public float getIdleTime() {
         return (System.currentTimeMillis() - startTime) / 1000.0f;
     }
@@ -58,28 +60,32 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.setLogTag(this);
         startTime = System.currentTimeMillis();
-        handlerThread = new HandlerThread(TAG);
-        handlerThread.start();
-        threadHandler = new BaseActionBarActivity.InternalHandler(this,handlerThread.getLooper());
-        uiHandler= new BaseActionBarActivity.InternalHandler(this,Looper.getMainLooper());
+        threadHandlerProxy = new ThreadHandlerProxy(this);
+        uiHandler = new BaseActionBarActivity.InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
     }
+
     @Override
     public void showToast(int resId) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
+        if (!isFinishing())
+            Toast.makeText(this.getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void showToast(String str) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+        if (!isFinishing())
+            Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void showToast(int resId, int duration) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), resId, duration).show();
+        if (!isFinishing()) Toast.makeText(this.getApplicationContext(), resId, duration).show();
     }
+
     @Override
     public void showToast(String str, int duration) {
-        if(!isFinishing())Toast.makeText(this.getApplicationContext(), str, duration).show();
+        if (!isFinishing()) Toast.makeText(this.getApplicationContext(), str, duration).show();
     }
 
     /**
@@ -104,17 +110,19 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
     public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
         if (null == stack) {
             throw new IllegalStateException("stack is null");
-        }else if(!stack.isStateSaved()){
+        } else if (!stack.isStateSaved()) {
             stack.replace(fragmentClass, tag, args);
             stack.commit();
-        }else{
-            Log.e(TAG,"Can not perform this action after onSaveInstanceState");
+        } else {
+            Log.e(TAG, "Can not perform this action after onSaveInstanceState");
         }
     }
+
     @Override
-    public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args,int moduleId) {
-        this.replaceFragment(fragmentClass,tag,args);
+    public void replaceFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args, int moduleId) {
+        this.replaceFragment(fragmentClass, tag, args);
     }
+
     @Override
     public CustomFragmentManager getCustomFragmentManager() {
         return stack;
@@ -135,7 +143,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
      *
      * @return
      */
-    public Session getSession() {
+    public SessionService getSession() {
         return app.getSession();
     }
 
@@ -172,9 +180,9 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
     @Override
     protected void onDestroy() {
         Log.v(TAG, "onDestroy");
-        if (null != stack)stack.destroy();
+        if (null != stack) stack.destroy();
         app.delActivityFromManager(this);
-        handlerThread.quit();
+        threadHandlerProxy.removeCallbacks();
         super.onDestroy();
     }
 
@@ -225,22 +233,24 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
         }
 
     }
+
     @Override
     public boolean isFullScreen() {
         int flag = this.getWindow().getAttributes().flags;
-         return (flag & WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                    == WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        return (flag & WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                == WindowManager.LayoutParams.FLAG_FULLSCREEN;
     }
+
     @Override
-    public final  void onBackPressed() {
+    public final void onBackPressed() {
         Log.v(TAG, "onBackPressed ");
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             onBack();
-        }else {
+        } else {
             if (!stack.peek().onBackPressed()) {
-                if (stack.size() == 1)  {
+                if (stack.size() == 1) {
                     onBack();
-                }else{
+                } else {
                     stack.popBackStack();
                 }
             }
@@ -255,14 +265,15 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
         Log.v(TAG, "onBack");
         super.onBackPressed();
     }
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             return super.onKeyUp(keyCode, event);
-        }else {
-            if(stack.peek().onKeyUp(keyCode, event)){
+        } else {
+            if (stack.peek().onKeyUp(keyCode, event)) {
                 return true;
-            }else {
+            } else {
                 return super.onKeyUp(keyCode, event);
             }
         }
@@ -270,16 +281,17 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (null == stack||stack.size()==0||stack.peek()==null) {
+        if (null == stack || stack.size() == 0 || stack.peek() == null) {
             return super.onKeyDown(keyCode, event);
-        }else {
-            if(stack.peek().onKeyDown(keyCode, event)){
+        } else {
+            if (stack.peek().onKeyDown(keyCode, event)) {
                 return true;
-            }else {
+            } else {
                 return super.onKeyDown(keyCode, event);
             }
         }
     }
+
     @Override
     public void showSoftInput(EditText editText) {
         editText.requestFocus();
@@ -287,6 +299,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
         imm.showSoftInput(editText, 0);
         editText.setText(null);
     }
+
     @Override
     public void hideSoftInput() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -294,6 +307,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
             imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
     @Override
     public void hideSoftInput(EditText editText) {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -307,26 +321,37 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
 
     @Override
     public Handler getThreadHandler() {
-        return threadHandler;
+        return threadHandlerProxy.getHandler();
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler!= null && runnable != null)
-            threadHandler.post(runnable);
+        this.postRunnable(runnable, true);
     }
-    protected void handleMessage(Message msg) {
+
+    protected void postWithoutBreak(StaticInnerRunnable runnable) {
+        this.postRunnable(runnable, false);
+    }
+
+    protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
+        if (runnable != null)
+            threadHandlerProxy.post(runnable, cancelable);
+    }
+
+    public void handleMessage(Message msg) {
         //do somethings
     }
-    protected  static class StaticInnerRunnable implements Runnable{
+
+    protected static class StaticInnerRunnable implements Runnable {
         @Override
         public void run() {
             //do somethings
         }
     }
-    static final  class InternalHandler extends Handler {
+
+    static final class InternalHandler extends Handler {
         private final WeakReference<Context> mContext;
 
-        public InternalHandler(Context context,Looper looper) {
+        public InternalHandler(Context context, Looper looper) {
             super(looper);
             mContext = new WeakReference<>(context);
         }
@@ -334,13 +359,13 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
         public void handleMessage(Message msg) {
             Context context = mContext.get();
             if (context != null) {
-                ((BaseFragmentActivity)context).handleMessage(msg);
+                ((BaseFragmentActivity) context).handleMessage(msg);
             }
         }
     }
 
     @ColorInt
-    public  int getThemeAttrColor(@AttrRes int colorAttr) {
+    public int getThemeAttrColor(@AttrRes int colorAttr) {
         TypedArray array = this.obtainStyledAttributes(null, new int[]{colorAttr});
         try {
             return array.getColor(0, 0);

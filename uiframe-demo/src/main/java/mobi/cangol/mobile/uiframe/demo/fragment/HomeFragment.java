@@ -63,7 +63,6 @@ public class HomeFragment extends BaseContentFragment {
         list.add(TabsFragment.class.getSimpleName().replace("Fragment", ""));
         list.add(TabPagesFragment.class.getSimpleName().replace("Fragment", ""));
         list.add(DialogFragment.class.getSimpleName().replace("Fragment", ""));
-        list.add(MaskViewFragment.class.getSimpleName().replace("Fragment", ""));
         list.add(HighLightFragment.class.getSimpleName().replace("Fragment", ""));
         if (getActivity() instanceof TabDrawerNavigationFragmentActivity)
             list.add(DrawerFragment.class.getSimpleName().replace("Fragment", ""));
@@ -78,8 +77,8 @@ public class HomeFragment extends BaseContentFragment {
                 String name = (String) parent.getItemAtPosition(position);
                 String className = "mobi.cangol.mobile.uiframe.demo.fragment." + name + "Fragment";
                 try {
-                    if("Result".equals(name))
-                        replaceFragmentForResult((Class<? extends BaseContentFragment>) Class.forName(className), name + "Fragment", null,1);
+                    if ("Result".equals(name))
+                        replaceFragmentForResult((Class<? extends BaseContentFragment>) Class.forName(className), name + "Fragment", null, 1);
                     else
                         setContentFragment((Class<? extends BaseContentFragment>) Class.forName(className), name + "Fragment", null);
                 } catch (ClassNotFoundException e) {

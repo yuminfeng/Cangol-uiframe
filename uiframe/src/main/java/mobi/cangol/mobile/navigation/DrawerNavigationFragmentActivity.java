@@ -17,14 +17,15 @@ package mobi.cangol.mobile.navigation;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.drawerlayout.widget.DrawerLayout.DrawerListener;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.drawerlayout.widget.DrawerLayout.DrawerListener;
 
 import mobi.cangol.mobile.base.BaseNavigationFragmentActivity;
 import mobi.cangol.mobile.logging.Log;

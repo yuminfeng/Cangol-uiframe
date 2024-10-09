@@ -1,6 +1,5 @@
 package mobi.cangol.mobile.uiframe.demo.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +85,7 @@ public class WebFragment extends BaseContentFragment {
          **/
 
         //应用缓存API可用
-        webSettings.setAppCacheEnabled(true);
+//        webSettings.setAppCacheEnabled(true);
         //DOM存储API可用
         webSettings.setDomStorageEnabled(true);
         webSettings.setTextSize(WebSettings.TextSize.NORMAL);
@@ -97,12 +96,9 @@ public class WebFragment extends BaseContentFragment {
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
          webSettings.setAllowUniversalAccessFromFileURLs(BuildConfig.DEBUG ? true : false);
          }**/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            android.webkit.WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {    //添加图片不显示解决方案
-            webView.getSettings().setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
+        //添加图片不显示解决方案
+        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         //设置WebView的用户代理字符串
         webSettings.setUserAgentString(webSettings.getUserAgentString() + " fdzq");

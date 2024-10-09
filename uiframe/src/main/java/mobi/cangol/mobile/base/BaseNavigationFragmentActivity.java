@@ -16,13 +16,13 @@
 package mobi.cangol.mobile.base;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.lang.ref.SoftReference;
 
@@ -42,6 +42,7 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
     public void setFloatActionBarEnabled(boolean floatActionBarEnabled) {
         mFloatActionBarEnabled = floatActionBarEnabled;
     }
+
     /**
      * 返回content布局的id
      *
@@ -79,11 +80,13 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
         super.onSaveInstanceState(outState);
         outState.putBoolean(MENU_SHOW, isShowMenu());
     }
+
     @Override
     public void setBackgroundColor(int color) {
         super.setBackgroundColor(color);
         mHelper.setBackgroundColor(color);
     }
+
     @Override
     public void setBackgroundResource(int resId) {
         super.setBackgroundResource(resId);
@@ -108,23 +111,6 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
         setContentView(v, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
-    @Override
-    public FrameLayout getMaskView() {
-        if(isFloatActionBarEnabled()){
-           return mHelper.getMaskView();
-        }else{
-           return super.getMaskView();
-        }
-    }
-    @Override
-    public void displayMaskView(boolean show) {
-        if(isFloatActionBarEnabled()){
-            mHelper.displayMaskView(show);
-        }else{
-            super.displayMaskView(show);
-        }
-    }
-
     public void showMenu(boolean show) {
         mHelper.showMenu(show);
     }
@@ -145,7 +131,7 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
     }
 
     public int getCurrentModuleId() {
-        if (menuFragmentReference == null||menuFragmentReference.get()==null) {
+        if (menuFragmentReference == null || menuFragmentReference.get() == null) {
             throw new IllegalStateException("menuFragment is null");
         } else {
             return menuFragmentReference.get().getCurrentModuleId();
@@ -153,21 +139,21 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
     }
 
     public BaseMenuFragment getMenuFragment() {
-        if(menuFragmentReference!=null)
+        if (menuFragmentReference != null)
             return menuFragmentReference.get();
         else
             return null;
     }
 
     public void setCurrentModuleId(int moduleId) {
-        if (menuFragmentReference != null&&menuFragmentReference.get()!=null) {
+        if (menuFragmentReference != null && menuFragmentReference.get() != null) {
             menuFragmentReference.get().setCurrentModuleId(moduleId);
         }
     }
 
     public final void setMenuFragment(Class<? extends BaseMenuFragment> fragmentClass, Bundle args) {
         BaseMenuFragment menuFragment = (BaseMenuFragment) Fragment.instantiate(this, fragmentClass.getName(), args);
-        menuFragmentReference=new SoftReference<>(menuFragment);
+        menuFragmentReference = new SoftReference<>(menuFragment);
         FragmentTransaction t = this.getSupportFragmentManager()
                 .beginTransaction();
         t.replace(mHelper.getMenuFrameId(), menuFragment, MENU_TAG);
@@ -183,16 +169,18 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
     public final void setContentFragment(Class<? extends BaseFragment> fragmentClass, String tag, Bundle args) {
         replaceFragment(fragmentClass, tag, args);
     }
+
     public final void setContentFragment(Class<? extends BaseFragment> fragmentClass, Bundle args) {
         replaceFragment(fragmentClass, fragmentClass.getName(), args);
     }
+
     public void notifyMenuOnClose() {
-        if (menuFragmentReference != null&&menuFragmentReference.get()!=null)
+        if (menuFragmentReference != null && menuFragmentReference.get() != null)
             menuFragmentReference.get().onClosed();
     }
 
     public void notifyMenuOnOpen() {
-        if (menuFragmentReference != null&&menuFragmentReference.get()!=null)
+        if (menuFragmentReference != null && menuFragmentReference.get() != null)
             menuFragmentReference.get().onOpen();
     }
 
@@ -200,8 +188,8 @@ public abstract class BaseNavigationFragmentActivity extends BaseActionBarActivi
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         BaseMenuFragment menuFragment = (BaseMenuFragment) getSupportFragmentManager().findFragmentByTag(MENU_TAG);
-        if(menuFragment!=null){
-            menuFragmentReference=new SoftReference<>(menuFragment);
+        if (menuFragment != null) {
+            menuFragmentReference = new SoftReference<>(menuFragment);
         }
     }
 }

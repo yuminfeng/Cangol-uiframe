@@ -19,10 +19,12 @@ import mobi.cangol.mobile.uiframe.demo.R;
 public class ListFragment extends BaseContentFragment {
     private ListView mListView;
     private DataAdapter mDataAdapter;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataAdapter=new DataAdapter();
+        mDataAdapter = new DataAdapter();
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,15 +48,15 @@ public class ListFragment extends BaseContentFragment {
     @Override
     protected void findViews(View view) {
         this.setTitle(this.getClass().getSimpleName());
-        mListView=findViewById(R.id.listView);
+        mListView = findViewById(R.id.listView);
         mListView.setAdapter(mDataAdapter);
-        mListView .setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = (String) parent.getItemAtPosition(position);
-                Bundle bundle=new Bundle();
-                bundle.putString("flag",name);
-                setContentFragment(ItemFragment.class,"ItemFragment_"+name,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", name);
+                setContentFragment(ItemFragment.class, "ItemFragment_" + name, bundle);
             }
         });
     }
@@ -68,16 +70,16 @@ public class ListFragment extends BaseContentFragment {
         getUiHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(!isEnable())return;
-                String[] array=getResources().getStringArray(R.array.sts);
-                List<String> temp=new ArrayList<>();
-                for (int i = 0; i <array.length ; i++) {
+                if (!isEnable()) return;
+                String[] array = getResources().getStringArray(R.array.sts);
+                List<String> temp = new ArrayList<>();
+                for (int i = 0; i < array.length; i++) {
                     temp.add(array[i]);
                 }
                 mDataAdapter.cleanAddAll(temp);
-                Log.d(TAG,"cleanAddAll "+temp.size());
+                Log.d(TAG, "cleanAddAll " + temp.size());
             }
-        },3000L);
+        }, 3000L);
     }
 
     private static class DataAdapter extends BaseAdapter {
@@ -116,8 +118,8 @@ public class ListFragment extends BaseContentFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view=LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-            TextView textView=view.findViewById(android.R.id.text1);
+            View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+            TextView textView = view.findViewById(android.R.id.text1);
             textView.setText(String.valueOf(getItem(position)));
             return textView;
         }

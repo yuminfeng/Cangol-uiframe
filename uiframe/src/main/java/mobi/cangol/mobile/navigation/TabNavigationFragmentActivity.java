@@ -31,6 +31,7 @@ public abstract class TabNavigationFragmentActivity extends BaseNavigationFragme
 
     /**
      * 此方法无效 固定返回false
+     *
      * @return
      */
     @Override
@@ -40,12 +41,14 @@ public abstract class TabNavigationFragmentActivity extends BaseNavigationFragme
 
     /**
      * 此方法无效
+     *
      * @param floatActionBarEnabled
      */
     @Override
     public void setFloatActionBarEnabled(boolean floatActionBarEnabled) {
-       //
+        //
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         this.setNavigationFragmentActivityDelegate(new TabNavigationFragmentActivityDelegate(
@@ -57,9 +60,9 @@ public abstract class TabNavigationFragmentActivity extends BaseNavigationFragme
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (stack == null||stack.size()==0||stack.peek()==null) {
+        if (stack == null || stack.size() == 0 || stack.peek() == null) {
             return true;
-        }else if (stack.size() <= 1) {
+        } else if (stack.size() <= 1) {
             stack.peek().onSupportNavigateUp();
             return true;
         } else {
@@ -84,7 +87,7 @@ class TabNavigationFragmentActivityDelegate extends
     public void onCreate(Bundle savedInstanceState) {
         mRootView = (ViewGroup) LayoutInflater.from(mActivity).inflate(
                 R.layout.navigation_tab_main, null);
-        mContentView =  mRootView.findViewById(R.id.content_view);
+        mContentView = mRootView.findViewById(R.id.content_view);
         mMenuView = mRootView.findViewById(R.id.menu_view);
     }
 

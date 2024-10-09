@@ -1,15 +1,16 @@
 package mobi.cangol.mobile.uiframe.demo.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,10 @@ public class RecyclerViewFragment extends BaseContentFragment {
     private RecyclerView mRecyclerView;
     private DataAdapter mDataAdapter;
     private NestedScrollView mScrollView;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataAdapter=new DataAdapter();
+        mDataAdapter = new DataAdapter();
     }
 
     @Override
@@ -50,7 +52,7 @@ public class RecyclerViewFragment extends BaseContentFragment {
     @Override
     protected void findViews(View view) {
         mRecyclerView = findViewById(R.id.recyclerView);
-        mScrollView=findViewById(R.id.scrollView);
+        mScrollView = findViewById(R.id.scrollView);
     }
 
     @Override
@@ -75,28 +77,31 @@ public class RecyclerViewFragment extends BaseContentFragment {
         getUiHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(!isEnable())return;
-                String[] array=getResources().getStringArray(R.array.sts);
-                List<String> temp=new ArrayList<>();
-                for (int i = 0; i <array.length ; i++) {
+                if (!isEnable()) return;
+                String[] array = getResources().getStringArray(R.array.sts);
+                List<String> temp = new ArrayList<>();
+                for (int i = 0; i < array.length; i++) {
                     temp.add(array[i]);
                 }
                 mDataAdapter.cleanAddAll(temp);
-                Log.d(TAG,"cleanAddAll "+temp.size());
+                Log.d(TAG, "cleanAddAll " + temp.size());
             }
-        },3000L);
+        }, 3000L);
     }
 
     private static class DataAdapter extends RecyclerView.Adapter {
         private List<String> items;
+
         DataAdapter() {
-            items=new ArrayList<>();
+            items = new ArrayList<>();
         }
+
         DataAdapter(List<String> items) {
             super();
             this.items = items;
         }
-        void cleanAddAll(List<String> list){
+
+        void cleanAddAll(List<String> list) {
             items.clear();
             items.addAll(list);
             this.notifyDataSetChanged();

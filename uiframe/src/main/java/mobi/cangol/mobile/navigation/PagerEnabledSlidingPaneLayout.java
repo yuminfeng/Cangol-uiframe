@@ -16,17 +16,18 @@
 package mobi.cangol.mobile.navigation;
 
 import android.content.Context;
-import androidx.core.view.MotionEventCompat;
-import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+
+import androidx.core.view.MotionEventCompat;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 /**
  * SlidingPaneLayout that, if closed, checks if children can scroll before it intercepts
  * touch events.  This allows it to contain horizontally scrollable children without
  * intercepting all of their touches.
- *
+ * <p>
  * To handle cases where the user is scrolled very far to the right, but should still be
  * able to open the pane without the need to scroll all the way back to the start, this
  * view also adds edge touch detection, so it will intercept edge swipes to open the pane.

@@ -8,8 +8,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import mobi.cangol.mobile.actionbar.ActionBarActivity;
 import mobi.cangol.mobile.base.BaseContentFragment;
-import mobi.cangol.mobile.base.BaseNavigationFragmentActivity;
 import mobi.cangol.mobile.uiframe.demo.R;
 import zhy.com.highlight.HighLight;
 import zhy.com.highlight.interfaces.HighLightInterface;
@@ -74,19 +74,15 @@ public class HighLightFragment extends BaseContentFragment {
                     }
                 })
                 .maskColor(Color.parseColor("#6f000000"))
-                .anchor(((BaseNavigationFragmentActivity) getActivity()).getMaskView().getRootView())
+                .anchor(((ActionBarActivity) getActivity()).getContentView())
                 .setOnShowCallback(new HighLightInterface.OnShowCallback() {
                     @Override
                     public void onShow(HightLightView hightLightView) {
-                        if(getActivity()!=null)
-                            ((BaseNavigationFragmentActivity) getActivity()).displayMaskView(true);
                     }
                 })
                 .setOnRemoveCallback(new HighLightInterface.OnRemoveCallback() {
                     @Override
                     public void onRemove() {
-                        if(getActivity()!=null)
-                            ((BaseNavigationFragmentActivity) getActivity()).displayMaskView(false);
                     }
                 })
                 .addHighLight(R.id.button0, R.layout.hight_layout, new OnLeftPosCallback(45), new RectLightShape());

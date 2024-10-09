@@ -1,33 +1,23 @@
 apply plugin: 'com.android.application'
-apply plugin: 'im.fir.plugin.gradle'
-fir {
-    apiToken 'c5cddea79fbc9176a98e216c6f154022'   //必填 上传 fir.im apk 字段，否则无法上传 APP 到 fir.im
-    changeLog ''
-}
-dependencies {
-    implementation 'androidx.fragment:fragment:1.2.5'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
 
-    implementation 'mobi.cangol.mobile:appcore:1.2.5'
-    implementation 'mobi.cangol.mobile:actionbar:1.2.3'
+dependencies {
+
+    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation project(':uiframe')
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.5.0'
+
     implementation 'com.isanwenyu.highlight:highlight:1.8.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
-    implementation 'com.squareup.okio:okio:2.2.2'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
 
     api 'androidx.multidex:multidex:2.0.1'
 
     //leak canary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 }
 
 android {
     compileSdkVersion Integer.decode("$sdk_version")
-    buildToolsVersion "$build_version"
 
     defaultConfig {
         multiDexEnabled true

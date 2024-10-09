@@ -17,12 +17,13 @@ package mobi.cangol.mobile.base;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorInt;
 import android.widget.EditText;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+
 import mobi.cangol.mobile.service.AppService;
-import mobi.cangol.mobile.service.session.Session;
+import mobi.cangol.mobile.service.session.SessionService;
 
 public interface BaseActivityDelegate {
 
@@ -89,7 +90,7 @@ public interface BaseActivityDelegate {
      *
      * @return
      */
-    Session getSession();
+    SessionService getSession();
 
     /**
      * 设置全屏
@@ -97,11 +98,12 @@ public interface BaseActivityDelegate {
      * @param fullscreen
      */
     void setFullScreen(boolean fullscreen);
+
     /**
      * 是否是全屏
-     *
      */
     boolean isFullScreen();
+
     /**
      * back按钮回调
      */
@@ -117,13 +119,11 @@ public interface BaseActivityDelegate {
 
     /**
      * 隐藏软键盘
-     *
      */
-     void hideSoftInput();
+    void hideSoftInput();
 
     /**
      * 隐藏软键盘
-     *
      */
     void hideSoftInput(EditText editText);
 

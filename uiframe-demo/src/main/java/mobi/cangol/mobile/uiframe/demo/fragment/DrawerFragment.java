@@ -1,6 +1,5 @@
 package mobi.cangol.mobile.uiframe.demo.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import mobi.cangol.mobile.base.BaseContentFragment;
-import mobi.cangol.mobile.base.BaseNavigationFragmentActivity;
 import mobi.cangol.mobile.navigation.TabDrawerNavigationFragmentActivity;
 import mobi.cangol.mobile.uiframe.demo.R;
 
@@ -41,12 +39,12 @@ public class DrawerFragment extends BaseContentFragment {
 
     protected void initViews(Bundle savedInstanceState) {
         this.setTitle(this.getClass().getSimpleName());
-        if(getActivity() instanceof TabDrawerNavigationFragmentActivity){
+        if (getActivity() instanceof TabDrawerNavigationFragmentActivity) {
             findViewById(R.id.button0).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getActivity() instanceof TabDrawerNavigationFragmentActivity)
-                        ((TabDrawerNavigationFragmentActivity)getActivity()).setDrawer(Gravity.RIGHT,ListFragment.class, null);
+                    if (getActivity() instanceof TabDrawerNavigationFragmentActivity)
+                        ((TabDrawerNavigationFragmentActivity) getActivity()).setDrawer(Gravity.RIGHT, ListFragment.class, null);
 
                 }
 
@@ -54,8 +52,8 @@ public class DrawerFragment extends BaseContentFragment {
             findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getActivity() instanceof TabDrawerNavigationFragmentActivity)
-                        showToast(""+((TabDrawerNavigationFragmentActivity)getActivity()).getDrawer(Gravity.RIGHT));
+                    if (getActivity() instanceof TabDrawerNavigationFragmentActivity)
+                        showToast("" + ((TabDrawerNavigationFragmentActivity) getActivity()).getDrawer(Gravity.RIGHT));
 
                 }
 
@@ -63,8 +61,8 @@ public class DrawerFragment extends BaseContentFragment {
             findViewById(R.id.button2).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getActivity() instanceof TabDrawerNavigationFragmentActivity)
-                        ((TabDrawerNavigationFragmentActivity)getActivity()).showDrawer(Gravity.RIGHT,true);
+                    if (getActivity() instanceof TabDrawerNavigationFragmentActivity)
+                        ((TabDrawerNavigationFragmentActivity) getActivity()).showDrawer(Gravity.RIGHT, true);
 
                 }
 
@@ -72,8 +70,8 @@ public class DrawerFragment extends BaseContentFragment {
             findViewById(R.id.button3).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getActivity() instanceof TabDrawerNavigationFragmentActivity)
-                        ((TabDrawerNavigationFragmentActivity)getActivity()).removeDrawer(Gravity.RIGHT);
+                    if (getActivity() instanceof TabDrawerNavigationFragmentActivity)
+                        ((TabDrawerNavigationFragmentActivity) getActivity()).removeDrawer(Gravity.RIGHT);
 
                 }
 
