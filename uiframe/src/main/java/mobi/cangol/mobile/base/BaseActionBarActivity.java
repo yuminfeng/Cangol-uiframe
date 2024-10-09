@@ -20,7 +20,6 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.view.KeyEvent;
@@ -38,18 +37,19 @@ import mobi.cangol.mobile.CoreApplication;
 import mobi.cangol.mobile.actionbar.ActionBarActivity;
 import mobi.cangol.mobile.actionbar.ActionMenu;
 import mobi.cangol.mobile.actionbar.ActionMenuItem;
+import mobi.cangol.mobile.handler.IMsgHandler;
+import mobi.cangol.mobile.handler.ThreadHandlerProxy;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
 import mobi.cangol.mobile.service.session.SessionService;
 
-public abstract class BaseActionBarActivity extends ActionBarActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate {
+public abstract class BaseActionBarActivity extends ActionBarActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate, IMsgHandler {
     protected final String TAG = Log.makeLogTag(this.getClass());
     protected CoreApplication app;
     protected CustomFragmentManager stack;
     private long startTime;
-    private HandlerThread handlerThread;
-    private Handler threadHandler;
     private Handler uiHandler;
+    private ThreadHandlerProxy threadHandlerProxy;
 
     public float getIdleTime() {
         return (System.currentTimeMillis() - startTime) / 1000.0f;
@@ -61,9 +61,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.v(TAG, "onCreate");
         startTime = System.currentTimeMillis();
-        handlerThread = new HandlerThread(TAG);
-        handlerThread.start();
-        threadHandler = new InternalHandler(this, handlerThread.getLooper());
+        threadHandlerProxy = new ThreadHandlerProxy(this);
         uiHandler = new InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
@@ -284,7 +282,7 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
         Log.v(TAG, "onDestroy");
         if (null != stack) stack.destroy();
         app.delActivityFromManager(this);
-        handlerThread.quit();
+        this.threadHandlerProxy.removeCallbacks();
         super.onDestroy();
     }
 
@@ -332,15 +330,23 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
 
     @Override
     public Handler getThreadHandler() {
-        return threadHandler;
+        return this.threadHandlerProxy.getHandler();
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler != null && runnable != null)
-            threadHandler.post(runnable);
+        this.postRunnable(runnable, true);
     }
 
-    protected void handleMessage(Message msg) {
+    protected void postWithoutBreak(StaticInnerRunnable runnable) {
+        this.postRunnable(runnable, false);
+    }
+
+    protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
+        if (runnable != null)
+            threadHandlerProxy.post(runnable, cancelable);
+    }
+
+    public void handleMessage(Message msg) {
         //do somethings
     }
 

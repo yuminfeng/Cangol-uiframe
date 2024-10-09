@@ -36,17 +36,18 @@ import androidx.fragment.app.FragmentActivity;
 import java.lang.ref.WeakReference;
 
 import mobi.cangol.mobile.CoreApplication;
+import mobi.cangol.mobile.handler.IMsgHandler;
+import mobi.cangol.mobile.handler.ThreadHandlerProxy;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
 import mobi.cangol.mobile.service.session.SessionService;
 
-public abstract class BaseFragmentActivity extends FragmentActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate {
+public abstract class BaseFragmentActivity extends FragmentActivity implements BaseActivityDelegate, CustomFragmentActivityDelegate, IMsgHandler {
     protected final String TAG = Log.makeLogTag(this.getClass());
     protected CoreApplication app;
     private CustomFragmentManager stack;
     private long startTime;
-    private HandlerThread handlerThread;
-    private Handler threadHandler;
+    private ThreadHandlerProxy threadHandlerProxy;
     private Handler uiHandler;
 
     public float getIdleTime() {
@@ -59,9 +60,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.setLogTag(this);
         startTime = System.currentTimeMillis();
-        handlerThread = new HandlerThread(TAG);
-        handlerThread.start();
-        threadHandler = new BaseActionBarActivity.InternalHandler(this, handlerThread.getLooper());
+        threadHandlerProxy = new ThreadHandlerProxy(this);
         uiHandler = new BaseActionBarActivity.InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
@@ -183,7 +182,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
         Log.v(TAG, "onDestroy");
         if (null != stack) stack.destroy();
         app.delActivityFromManager(this);
-        handlerThread.quit();
+        threadHandlerProxy.removeCallbacks();
         super.onDestroy();
     }
 
@@ -322,15 +321,23 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements B
 
     @Override
     public Handler getThreadHandler() {
-        return threadHandler;
+        return threadHandlerProxy.getHandler();
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler != null && runnable != null)
-            threadHandler.post(runnable);
+        this.postRunnable(runnable, true);
     }
 
-    protected void handleMessage(Message msg) {
+    protected void postWithoutBreak(StaticInnerRunnable runnable) {
+        this.postRunnable(runnable, false);
+    }
+
+    protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
+        if (runnable != null)
+            threadHandlerProxy.post(runnable, cancelable);
+    }
+
+    public void handleMessage(Message msg) {
         //do somethings
     }
 
