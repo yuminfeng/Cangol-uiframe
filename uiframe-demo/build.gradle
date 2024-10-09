@@ -13,7 +13,7 @@ dependencies {
     api 'androidx.multidex:multidex:2.0.1'
 
     //leak canary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 }
 
 android {

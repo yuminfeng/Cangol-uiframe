@@ -36,6 +36,8 @@ import androidx.annotation.ColorInt;
 import java.lang.ref.WeakReference;
 
 import mobi.cangol.mobile.CoreApplication;
+import mobi.cangol.mobile.handler.IMsgHandler;
+import mobi.cangol.mobile.handler.ThreadHandlerProxy;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
 import mobi.cangol.mobile.service.session.SessionService;
@@ -43,12 +45,11 @@ import mobi.cangol.mobile.service.session.SessionService;
 /**
  * @author Cangol
  */
-public abstract class BaseActivity extends Activity implements BaseActivityDelegate {
+public abstract class BaseActivity extends Activity implements BaseActivityDelegate, IMsgHandler {
     protected final String TAG = Log.makeLogTag(this.getClass());
     private CoreApplication app;
     private long startTime;
-    private HandlerThread handlerThread;
-    private Handler threadHandler;
+    private ThreadHandlerProxy threadHandlerProxy;
     private Handler uiHandler;
 
     public float getIdleTime() {
@@ -62,9 +63,7 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
         Log.setLogTag(this);
         Log.v(TAG, "onCreate");
         startTime = System.currentTimeMillis();
-        handlerThread = new HandlerThread(TAG);
-        handlerThread.start();
-        threadHandler = new InternalHandler(this, handlerThread.getLooper());
+        threadHandlerProxy = new ThreadHandlerProxy(this);
         uiHandler = new InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getApplication();
         app.addActivityToManager(this);
@@ -158,7 +157,7 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
     protected void onDestroy() {
         Log.v(TAG, "onDestroy");
         app.delActivityFromManager(this);
-        handlerThread.quit();
+        threadHandlerProxy.removeCallbacks();
         super.onDestroy();
     }
 
@@ -216,16 +215,20 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
 
     @Override
     public Handler getThreadHandler() {
-        return threadHandler;
+        return threadHandlerProxy.getHandler();
     }
 
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler != null && runnable != null)
-            threadHandler.post(runnable);
+        this.postRunnable(runnable, true);
     }
 
-    protected void handleMessage(Message msg) {
+    protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
+        if (runnable != null)
+            threadHandlerProxy.post(runnable, cancelable);
+    }
+
+    public void handleMessage(Message msg) {
         // do somethings
     }
 

@@ -33,23 +33,27 @@
             android:name=".activity.TabActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
+            android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan|adjustResize" />
         <activity
             android:name=".activity.SlidingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
+            android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan|adjustResize" />
 
         <activity
             android:name=".activity.TabDrawerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation"
             android:launchMode="singleTask"
+            android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan|adjustResize" />
 
         <activity
             android:name=".activity.DrawerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation"
             android:launchMode="singleTask"
+            android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan|adjustResize" />
     </application>
 

@@ -40,11 +40,13 @@ import androidx.fragment.app.Fragment;
 import java.lang.ref.WeakReference;
 
 import mobi.cangol.mobile.CoreApplication;
+import mobi.cangol.mobile.handler.IMsgHandler;
+import mobi.cangol.mobile.handler.ThreadHandlerProxy;
 import mobi.cangol.mobile.logging.Log;
 import mobi.cangol.mobile.service.AppService;
 import mobi.cangol.mobile.service.session.SessionService;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements IMsgHandler {
     public static final int RESULT_CANCELED = 0;
     public static final int RESULT_OK = -1;
     public static final String REQUEST_CODE_1 = "requestCode!=-1";
@@ -55,9 +57,8 @@ public abstract class BaseFragment extends Fragment {
     private int resultCode = RESULT_CANCELED;
     private Bundle resultData;
     private CustomFragmentManager stack;
-    protected HandlerThread handlerThread;
-    private Handler threadHandler;
     private Handler uiHandler;
+    private ThreadHandlerProxy threadHandlerProxy;
 
     /**
      * 查找view
@@ -178,9 +179,7 @@ public abstract class BaseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v(TAG, "onCreate");
-        handlerThread = new HandlerThread(TAG);
-        handlerThread.start();
-        threadHandler = new InternalHandler(this, handlerThread.getLooper());
+        threadHandlerProxy = new ThreadHandlerProxy(this);
         uiHandler = new InternalHandler(this, Looper.getMainLooper());
         app = (CoreApplication) this.getActivity().getApplication();
         if (savedInstanceState != null && null != stack) {
@@ -245,7 +244,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        handlerThread.quit();
+        threadHandlerProxy.removeCallbacks();
         if (null != stack) stack.destroy();
         super.onDestroy();
         Log.v(TAG, "onDestroy");
@@ -776,21 +775,20 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected Handler getThreadHandler() {
-        return threadHandler;
+        return threadHandlerProxy.getHandler();
     }
 
-    protected void handleMessage(Message msg) {
+    public void handleMessage(Message msg) {
         //do somethings
     }
 
     protected void postRunnable(StaticInnerRunnable runnable) {
-        if (threadHandler != null && runnable != null)
-            threadHandler.post(runnable);
+        this.postRunnable(runnable, true);
     }
 
-    protected void postRunnable(Runnable runnable) {
-        if (threadHandler != null && runnable != null)
-            threadHandler.post(runnable);
+    protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
+        if (runnable != null)
+            threadHandlerProxy.post(runnable, cancelable);
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
