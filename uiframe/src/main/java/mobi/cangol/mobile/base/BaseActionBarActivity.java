@@ -337,6 +337,10 @@ public abstract class BaseActionBarActivity extends ActionBarActivity implements
         this.postRunnable(runnable, true);
     }
 
+    protected void postWithoutBreak(StaticInnerRunnable runnable) {
+        this.postRunnable(runnable, false);
+    }
+
     protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
         if (runnable != null)
             threadHandlerProxy.post(runnable, cancelable);

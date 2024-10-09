@@ -223,6 +223,10 @@ public abstract class BaseActivity extends Activity implements BaseActivityDeleg
         this.postRunnable(runnable, true);
     }
 
+    protected void postWithoutBreak(StaticInnerRunnable runnable) {
+        this.postRunnable(runnable, false);
+    }
+
     protected void postRunnable(StaticInnerRunnable runnable, boolean cancelable) {
         if (runnable != null)
             threadHandlerProxy.post(runnable, cancelable);
