@@ -15,13 +15,12 @@
  */
 package mobi.cangol.mobile.base;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.util.TypedValue;
@@ -35,6 +34,7 @@ import android.widget.EditText;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import java.lang.ref.WeakReference;
@@ -153,10 +153,11 @@ public abstract class BaseFragment extends Fragment implements IMsgHandler {
 
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
         Log.v(TAG, "onAttach");
     }
+
 
     @Override
     public void onAttachFragment(Fragment childFragment) {
